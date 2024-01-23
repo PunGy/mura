@@ -1,17 +1,25 @@
-import { ServiceProvider } from "./ServiceProvider";
+import {UniqueStack} from "src:/lib/stack.ts";
+
 
 export class InputService {
-  keypressed: string | null = null; 
-  constructor() {
+  private keyStack = new UniqueStack<string>()
 
+  get activeKey() {
+    return this.keyStack.peek()
+  };
+  get keysPressed() {
+    let keys: Record<string, boolean> = {}
+    this.keyStack.forEach(key => keys[key] = true)
+    return keys
   }
 
   init() {
     document.addEventListener('keydown', (event) => {
-      this.keypressed = event.code
+      this.keyStack.push(event.code)
+      console.log(this.keysPressed)
     })
-    document.addEventListener('keyup', () => {
-      this.keypressed = null
+    document.addEventListener('keyup', (event) => {
+      this.keyStack.delete(event.code)
     })
   }
-} 
+}

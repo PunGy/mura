@@ -42,26 +42,28 @@ export class Player extends AnimationNode<PlayerAnimation>{
   act(delta: number) {
     const inputService = ServiceProvider.get('InputService')
 
-    const {keypressed} = inputService
+    const { activeKey } = inputService
     const {position, speed} = this
-    if (keypressed === "KeyD") {
-      position.x += speed * delta
-      this.activeAnimation.sprite?.renderer.invert(false)
-    } else if (keypressed === 'KeyA') {
-      this.activeAnimation.sprite?.renderer.invert(true)
-      position.x -= speed * delta
-    } else if (keypressed === 'KeyW') {
-      position.y -= speed * delta
-    } else if (keypressed === 'KeyS') {
-      position.y += speed * delta
-    }
-
-    if (Player.movementKeys.has(keypressed!)) {
+    if (Player.movementKeys.has(activeKey!)) {
       this.setAnimation('move')
-    } else {
-      this.setAnimation('stay')
+    }
+    switch (activeKey) {
+      case 'KeyD':
+        position.x += speed * delta
+        this.activeAnimation.sprite?.renderer.invert(false)
+        break
+      case 'KeyA':
+        this.activeAnimation.sprite?.renderer.invert(true)
+        position.x -= speed * delta
+        break
+      case 'KeyW':
+        position.y -= speed * delta
+        break
+      case 'KeyS':
+        position.y += speed * delta
+        break
+      default:
+        this.setAnimation('stay')
     }
   }
-
-
 }
