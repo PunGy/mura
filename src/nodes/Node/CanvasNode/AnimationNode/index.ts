@@ -1,6 +1,7 @@
 import { CanvasNode } from 'src:/nodes/Node/CanvasNode'
 import type {Sprite} from "src:/services/RenderService";
 import {ServiceProvider} from "src:/services/ServiceProvider.ts";
+import {CHUNK_SIZE} from "src:/scenes/SceneSettings.ts";
 
 export type PlayAnimationEntry = {
   frames: number, // 0 if static
@@ -17,11 +18,22 @@ export type AnimationEntry = PlayAnimationEntry | StaticAnimationEntry
 export class AnimationNode<AnimationKeys extends PropertyKey> extends CanvasNode {
   animations = {} as Record<AnimationKeys, AnimationEntry>
   activeAnimationKey = '' as AnimationKeys
-  activeFrame = 0
+  _activeFrame = 0
   frameWidth = 0
   frameHeight = 0
   get activeAnimation() {
     return this.animations[this.activeAnimationKey]
+  }
+
+  get activeFrame() {
+    return this._activeFrame
+  }
+  set activeFrame(activeFrame) {
+    if (this.activeAnimation.sprite !== null) {
+      this.activeAnimation.sprite.renderer
+        .crop(this.frameWidth * this.activeFrame, 0, this.frameWidth, this.frameHeight)
+    }
+    this._activeFrame = activeFrame
   }
 
   makeAnimationSprite(spriteSource: CanvasImageSource): Sprite {
@@ -29,7 +41,7 @@ export class AnimationNode<AnimationKeys extends PropertyKey> extends CanvasNode
     return {
       resource: spriteSource,
       renderer: renderService.getSpriteRenderer(spriteSource)
-        .size(this.width, this.height)
+        .size(this.width * CHUNK_SIZE, this.height * CHUNK_SIZE)
     }
   }
   static staticFrameAnimation(sprite: StaticAnimationEntry['sprite']): StaticAnimationEntry {

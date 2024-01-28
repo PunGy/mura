@@ -1,4 +1,5 @@
 import {assertNil, isNil, assert } from 'src:/lib'
+import {ServiceProvider} from "src:/services/ServiceProvider.ts";
 
 export type Sprite = {
   resource: CanvasImageSource;
@@ -50,13 +51,20 @@ class DrawSpriteBuilder implements IDrawSpriteBuilder {
   draw() {
     assertNil(this._x, 'You should assign the "x" position for drawing a sprite!')
     assertNil(this._y, 'You should assign the "y" position for drawing a sprite!')
+    const renderingService = ServiceProvider.get('RenderService')
 
     let { _x: x, _y: y } = this
     if (this._invert) {
       this._ctx.save()
       x = -x + (-(this._size ? this._size.width : (this._img as HTMLImageElement).width))
       this._ctx.scale(-1, 1)
+
+      x = x + renderingService.offsetX
+    } else {
+      x = x - renderingService.offsetX
     }
+    y = y - renderingService.offsetY
+
 
     switch (true) {
       case !isNil(this._crop):
@@ -85,6 +93,9 @@ export class RenderService {
   private canvas: HTMLCanvasElement
   private readonly ctx: CanvasRenderingContext2D
 
+  offsetX = 0;
+  offsetY = 0;
+
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
     const ctx = canvas.getContext('2d')
@@ -109,6 +120,10 @@ export class RenderService {
     }
   }
 
+  clear() {
+    const viewportService = ServiceProvider.get('ViewportService')
+    this.ctx.clearRect(0, 0, viewportService.width, viewportService.height)
+  }
 
   getSpriteRenderer(img: CanvasImageSource) {
     return new DrawSpriteBuilder(this.ctx, img)

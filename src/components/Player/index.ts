@@ -1,21 +1,25 @@
+// import PlayerSprite from 'src:/resources/character_sprites.png'
 import PlayerSprite from './char.png'
 import PlayerReversedSprite from './char_reversed.png'
 import { ServiceProvider } from 'src:/services/ServiceProvider';
 import { Vector } from 'src:/lib/vector';
 import {AnimationNode, PlayAnimationEntry} from "src:/nodes/Node/CanvasNode/AnimationNode";
+import {CHUNK_SIZE} from "src:/scenes/SceneSettings.ts";
+import {Camera} from "src:/components/Player/camera.ts";
 
 type PlayerAnimation = 'stay' | 'move'
 export class Player extends AnimationNode<PlayerAnimation>{
-  position: Vector = new Vector(10, 10)
+  position: Vector = new Vector(CHUNK_SIZE * 6, CHUNK_SIZE * 7)
   // units / milliseconds
   speed = 0.16;
 
   direction: 'left' | 'right' = 'right'
+  camera: Camera
 
   constructor() {
     super();
-    this.width = 128
-    this.height = 128
+    this.width = 2
+    this.height = 2
     this.frameHeight = 128
     this.frameWidth = 128
     this.animations = {
@@ -26,6 +30,9 @@ export class Player extends AnimationNode<PlayerAnimation>{
       },
       stay: AnimationNode.staticFrameAnimation(null),
     }
+
+    this.camera = new Camera(this)
+
     this.setAnimation('stay')
   }
 
@@ -65,5 +72,7 @@ export class Player extends AnimationNode<PlayerAnimation>{
       default:
         this.setAnimation('stay')
     }
+
+    this.camera.act()
   }
 }

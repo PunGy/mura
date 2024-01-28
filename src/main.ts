@@ -3,11 +3,13 @@ import { FileService } from './services/FileService'
 import { RenderService } from './services/RenderService'
 import { ServiceProvider } from './services/ServiceProvider'
 import { ViewportService } from './services/ViewportService'
-import Grass2 from './resources/grass2.png'
 
-import { isNil, isCanvas, assert, assertNil } from './lib'
+import { isCanvas, assert, assertNil } from './lib'
 import { InputService } from './services/InputService'
 import { Player } from './components/Player'
+import {SceneService} from "src:/services/SceneService.ts";
+import {MainScene} from "src:/scenes/MainScene.ts";
+import {CHUNK_SIZE} from "src:/scenes/SceneSettings.ts";
 
 
 const player = new Player()
@@ -21,20 +23,23 @@ async function main() {
   const renderService = new RenderService(canvasEl)
   const viewportService = new ViewportService(canvasEl, 800, 600)
   const inputService = new InputService()
+  const sceneService = new SceneService(new MainScene())
 
   ServiceProvider.registerServices({
     'ViewportService': viewportService,
     'RenderService': renderService,
     'FileService': fileService,
     'InputService': inputService,
+    'SceneService': sceneService,
   })
 
   viewportService.initViewport()
   viewportService.toggleInCenter()
   inputService.init()
 
-  await fileService.loadImage(Grass2)
-  await player.init()
+  const sceneInitialization = sceneService.activeScene.init()
+  if (sceneInitialization instanceof Promise)
+    await sceneInitialization
 
   let start: number, previousTimeStamp: number, delta: number;
   function f(timeStamp: number) {
@@ -50,26 +55,11 @@ async function main() {
 }
 
 function gameLoop(delta: number, start: number) {
-  const fileService = ServiceProvider.get('FileService')
-  const viewportService = ServiceProvider.get('ViewportService')
+  const sceneService = ServiceProvider.get('SceneService')
   const renderService = ServiceProvider.get('RenderService')
 
-  const width = viewportService.width
-  const height = viewportService.height
-  const chunkSize = 64
-
-  const img = fileService.getResource(Grass2)!
-
-  for (let y = 0; y < height; y += chunkSize) {
-    for (let x = 0; x < width; x += chunkSize) {
-      renderService.sprite(img, x, y)
-    }
-  }
-
-  player.act(delta)
-  player.animate(delta)
-  player.render()
+  sceneService.activeScene.nodesTick(delta)
+  // renderService.rect(CHUNK_SIZE * 4, 0, CHUNK_SIZE, CHUNK_SIZE, '#000');
 }
-
 
 main()

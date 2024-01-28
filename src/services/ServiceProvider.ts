@@ -2,17 +2,19 @@ import type { FileService } from "./FileService";
 import type { InputService } from "./InputService";
 import type { RenderService } from "./RenderService";
 import type { ViewportService } from "./ViewportService";
+import {SceneService} from "src:/services/SceneService.ts";
 
 type Services = {
   'RenderService': RenderService,
   'ViewportService': ViewportService,
   'FileService': FileService,
   'InputService': InputService,
+  'SceneService': SceneService,
 }
 
 export class ServiceProvider {
   static _services: Services
-  
+
   static registerServices(services: Services) {
     ServiceProvider._services = services
   }
