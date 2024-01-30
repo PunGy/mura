@@ -6,12 +6,14 @@ import { Vector } from 'src:/lib/vector';
 import {AnimationNode, PlayAnimationEntry} from "src:/nodes/Node/CanvasNode/AnimationNode";
 import {CHUNK_SIZE} from "src:/scenes/SceneSettings.ts";
 import {Camera} from "src:/components/Player/camera.ts";
+import {CollisionController} from "src:/components/Player/collisionController.ts";
 
 type PlayerAnimation = 'stay' | 'move'
 export class Player extends AnimationNode<PlayerAnimation>{
-  position: Vector = new Vector(CHUNK_SIZE * 6, CHUNK_SIZE * 7)
+  position: Vector = new Vector(CHUNK_SIZE * 6, CHUNK_SIZE * 8)
   // units / milliseconds
   speed = 0.16;
+  collisionController: CollisionController;
 
   direction: 'left' | 'right' = 'right'
   camera: Camera
@@ -32,6 +34,33 @@ export class Player extends AnimationNode<PlayerAnimation>{
     }
 
     this.camera = new Camera(this)
+    this.collisionController = new CollisionController(this, {
+      x: this.position.x + 32,
+      y: this.position.y + 16,
+    }, this.width * (CHUNK_SIZE / 2.2), this.height * (CHUNK_SIZE / 1.45))
+
+    let { x, y } = this.position
+    const collisionController = this.collisionController
+    Object.defineProperties(this.position, {
+      x: {
+        get() {
+          return x
+        },
+        set(val) {
+          x = val
+          collisionController.position.x = val + 32
+        }
+      },
+      y: {
+        get() {
+          return y
+        },
+        set(val) {
+          y = val
+          collisionController.position.y = val + 16
+        }
+      }
+    })
 
     this.setAnimation('stay')
   }
@@ -45,15 +74,21 @@ export class Player extends AnimationNode<PlayerAnimation>{
     })
   }
 
+  render() {
+    super.render()
+
+    this.drawDebugRect()
+    this.collisionController.drawDebugRect('red', false)
+  }
+
   static movementKeys = new Set(['KeyD', 'KeyA', 'KeyW', 'KeyS'])
   act(delta: number) {
     const inputService = ServiceProvider.get('InputService')
 
     const { activeKey } = inputService
     const {position, speed} = this
-    if (Player.movementKeys.has(activeKey!)) {
-      this.setAnimation('move')
-    }
+
+    const { x: ix, y: iy } = position
     switch (activeKey) {
       case 'KeyD':
         position.x += speed * delta
@@ -71,6 +106,16 @@ export class Player extends AnimationNode<PlayerAnimation>{
         break
       default:
         this.setAnimation('stay')
+    }
+
+    if (Player.movementKeys.has(activeKey!)) {
+      this.setAnimation('move')
+      const c = this.collisionController.getCollision()
+      if (c) {
+        c.drawDebugRect('blue')
+        position.x = ix
+        position.y = iy
+      }
     }
 
     this.camera.act()

@@ -105,6 +105,10 @@ export class RenderService {
     this.ctx = ctx
   }
 
+  getCtx() {
+    return this.ctx
+  }
+
   rect(x: number, y: number, w: number, h: number, c: string) {
     this.ctx.fillStyle = c
     this.ctx.fillRect(x, y, w, h)

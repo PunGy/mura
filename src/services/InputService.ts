@@ -16,7 +16,6 @@ export class InputService {
   init() {
     document.addEventListener('keydown', (event) => {
       this.keyStack.push(event.code)
-      console.log(this.keysPressed)
     })
     document.addEventListener('keyup', (event) => {
       this.keyStack.delete(event.code)
