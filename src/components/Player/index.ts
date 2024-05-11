@@ -1,5 +1,5 @@
 // import PlayerSprite from 'src:/resources/character_sprites.png'
-import PlayerSprite from './char.png'
+import PlayerSprite from './cat.png'
 import PlayerReversedSprite from './char_reversed.png'
 import { ServiceProvider } from 'src:/services/ServiceProvider';
 import { Vector } from 'src:/lib/vector';
@@ -22,11 +22,11 @@ export class Player extends AnimationNode<PlayerAnimation>{
     super();
     this.width = 2
     this.height = 2
-    this.frameHeight = 128
-    this.frameWidth = 128
+    this.frameHeight = 100
+    this.frameWidth = 100
     this.animations = {
       move: {
-        frames: 5,
+        frames: 0,
         duration: 150,
         sprite: null,
       },
@@ -92,10 +92,10 @@ export class Player extends AnimationNode<PlayerAnimation>{
     switch (activeKey) {
       case 'KeyD':
         position.x += speed * delta
-        this.activeAnimation.sprite?.renderer.invert(false)
+        this.activeAnimation.sprite?.renderer.invert(true)
         break
       case 'KeyA':
-        this.activeAnimation.sprite?.renderer.invert(true)
+        this.activeAnimation.sprite?.renderer.invert(false)
         position.x -= speed * delta
         break
       case 'KeyW':

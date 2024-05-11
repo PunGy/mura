@@ -9,8 +9,6 @@ import { InputService } from './services/InputService'
 import { Player } from './components/Player'
 import {SceneService} from "src:/services/SceneService.ts";
 import {MainScene} from "src:/scenes/MainScene.ts";
-import {CHUNK_SIZE} from "src:/scenes/SceneSettings.ts";
-
 
 const player = new Player()
 async function main() {

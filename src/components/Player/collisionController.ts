@@ -28,7 +28,7 @@ export class CollisionController extends Node {
 
       return (
         p1.x < p2x2 && p1x2 > p2.x &&
-        p1.y < p2y2 && p1y2 > p1.y
+        p1.y < p2y2 && p1y2 > p2.y
       )
     })
   }
