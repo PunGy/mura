@@ -21,7 +21,7 @@ export class InputService {
         return keys
     }
 
-    register(key: string, callback: EventCallback) {
+    registerKeyPress(key: string, callback: EventCallback) {
         const config = {
             callback,
             locked: false,

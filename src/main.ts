@@ -6,11 +6,9 @@ import { ViewportService } from './services/ViewportService'
 
 import { isCanvas, assert, assertNil } from './lib'
 import { InputService } from './services/InputService'
-import { Player } from './games/mura/components/Player'
 import {SceneService} from "src:/services/SceneService.ts";
 import {MainScene} from "src:/games/spaceInvaders/scenes/MainScene";
 
-const player = new Player()
 async function main() {
     const canvasEl = document.getElementById('world')
 
@@ -52,12 +50,17 @@ async function main() {
     window.requestAnimationFrame(f)
     window.ServiceProvider = ServiceProvider
 }
+declare global {
+    interface Window {
+        ServiceProvider: ServiceProvider;
+    }
+}
 
 function gameLoop(delta: number, start: number) {
     const sceneService = ServiceProvider.get('SceneService')
-    const renderService = ServiceProvider.get('RenderService')
 
     sceneService.activeScene.nodesTick(delta)
+    // const renderService = ServiceProvider.get('RenderService')
     // renderService.rect(CHUNK_SIZE * 4, 0, CHUNK_SIZE, CHUNK_SIZE, '#000');
 }
 

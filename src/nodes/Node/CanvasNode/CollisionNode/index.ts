@@ -1,19 +1,6 @@
-import {Node} from 'src:/nodes/Node'
-import {Vector} from "src:/lib/vector.ts";
-import {ServiceProvider} from "src:/services/ServiceProvider.ts";
-import {CHUNK_SIZE} from "src:/scenes/SceneSettings.ts";
+import { ServiceProvider } from "src:/services/ServiceProvider";
 
-export class CollisionController extends Node {
-    parent: Node;
-
-    constructor(parent: Node, position: Vector, width: number, height: number) {
-        super()
-        this.position = position
-        this.width = width
-        this.height = height
-        this.parent = parent
-    }
-
+export class CollisionNode extends Node {
     getCollision() {
         const scene = ServiceProvider.get('SceneService').activeScene
 
@@ -32,5 +19,4 @@ export class CollisionController extends Node {
             )
         })
     }
-
 }
