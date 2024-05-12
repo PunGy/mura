@@ -1,17 +1,17 @@
 import {Scene} from "src:/scenes/Scene.ts";
 
 export class SceneService {
-  private _activeScene: Scene;
+    private _activeScene: Scene;
 
-  get activeScene(): Readonly<Scene> {
-    return this._activeScene
-  }
+    get activeScene(): Readonly<Scene> {
+        return this._activeScene
+    }
 
-  setActiveScene(scene: Scene) {
-    this._activeScene = scene
-  }
+    setActiveScene(scene: Scene) {
+        this._activeScene = scene
+    }
 
-  constructor(initialScene: Scene) {
-    this._activeScene = initialScene
-  }
+    constructor(initialScene: Scene) {
+        this._activeScene = initialScene
+    }
 }

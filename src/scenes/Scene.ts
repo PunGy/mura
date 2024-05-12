@@ -3,26 +3,44 @@ import {CanvasNode} from "src:/nodes/Node/CanvasNode";
 import {AnimationNode} from "src:/nodes/Node/CanvasNode/AnimationNode";
 
 export class Scene {
-  protected nodes: Array<Node> = []
+    protected nodes: Map<number, Node> = new Map()
 
-  addNode(node: Node) {
-    this.nodes.push(node)
-  }
-  getNodes(): Readonly<Array<Node>> {
-    return this.nodes
-  }
-  nodesTick(delta: number) {
-    const nodes = this.nodes
-    for (let i = 0; i < nodes.length; i++) {
-      const node = nodes[i]
-      node.act(delta)
-      if (node instanceof CanvasNode)
-        node.render()
-      if (node instanceof AnimationNode)
-        node.animate(delta)
+    addNode(node: Node) {
+        this.nodes.set(node.id, node)
     }
-  }
+    removeNode(node: Node) {
+        this.nodes.delete(node.id)
+    }
+    getNodes(): Readonly<Array<Node>> {
+        return Array.from(this.nodes.values())
+    }
+    nodesTick(delta: number) {
+        const nodes = this.nodes
+        for (const node of nodes.values()) {
+            node.act(delta)
+            if (node instanceof CanvasNode)
+                node.render()
+            if (node instanceof AnimationNode)
+                node.animate(delta)
+        }
+    }
 
+    init(): void | Promise<void> {
+        const effects: Array<Promise<void>> = []
+        this.nodes.forEach((node) => {
+            const effect = node.init()
+            if (effect instanceof Promise)
+                effects.push(effect)
+        })
 
-  init(): void | Promise<void> {}
+        if (effects.length > 0) {
+            return Promise.allSettled(effects)
+                .then((results) => {
+                    results.forEach((res) => {
+                        if (res.status === 'rejected')
+                            console.error('unable to make an effect', res.reason)
+                    })
+                })
+        }
+    }
 }

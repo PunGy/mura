@@ -22,7 +22,8 @@
 
     /* Paths */
     "paths": {
-      "src:/*": ["./src/*"]
+      "src:/*": ["./src/*"],
+      "game:/*": ["src/games/spaceInvaders/*"],
     }
   },
   "include": ["src"]

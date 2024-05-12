@@ -20,7 +20,7 @@ export class SpriteNode extends CanvasNode {
     this.sprite = {
       resource: file,
       renderer: renderService.getSpriteRenderer(file)
-        .size(this.width * CHUNK_SIZE, this.height * CHUNK_SIZE)
+        .size(this.width, this.height)
     }
   }
   render() {

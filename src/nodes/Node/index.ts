@@ -3,29 +3,39 @@ import {CHUNK_SIZE} from "src:/scenes/SceneSettings.ts";
 import {ServiceProvider} from "src:/services/ServiceProvider.ts";
 
 export class Node {
-  public position: Vector = new Vector(0, 0)
+    private static lastId = 0
+    static issueId() {
+        return Node.lastId++
+    }
 
-  // The size of objects is measured in chunks (see in src:/scenes/SceneSettings)
-  // Example: { width: 2 } -> { width: CHUNK_SIZE * 2 }
-  public width: number = 1
-  public height: number = 1
+    public position: Vector = new Vector(0, 0)
+    public readonly id: number
 
-  public collided = false
+    // The size of objects is measured in chunks (see in src:/scenes/SceneSettings)
+    // Example: { width: 2 } -> { width: CHUNK_SIZE * 2 }
+    public width: number = 1
+    public height: number = 1
 
-  init(): void | Promise<void> {};
-  act(delta: number): void {};
+    public collided = false
 
-  drawDebugRect(color = 'yellow', withChunkSize = true) {
-    const renderService = ServiceProvider.get('RenderService')
-    const ctx = renderService.getCtx()
+    constructor() {
+        this.id = Node.issueId()
+    }
 
-    ctx.strokeStyle = color
-    const mult = withChunkSize ? CHUNK_SIZE : 1
-    ctx.strokeRect(
-      this.position.x - renderService.offsetX,
-      this.position.y - renderService.offsetY,
-      this.width * mult,
-      this.height * mult,
-    )
-  }
+    init(): void | Promise<void> {};
+    act(delta: number): void {};
+
+    drawDebugRect(color = 'yellow', withChunkSize = true) {
+        const renderService = ServiceProvider.get('RenderService')
+        const ctx = renderService.getCtx()
+
+        ctx.strokeStyle = color
+        const mult = withChunkSize ? CHUNK_SIZE : 1
+        ctx.strokeRect(
+            this.position.x - renderService.offsetX,
+            this.position.y - renderService.offsetY,
+            this.width * mult,
+            this.height * mult,
+        )
+    }
 }
