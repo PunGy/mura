@@ -1,15 +1,15 @@
 
-import {Scene} from "./Scene.ts";
+import {Scene} from "../../../scenes/Scene.ts";
 import {Node} from "src:/nodes/Node";
-import {Grass} from "src:/components/Grass";
-import {Water} from "src:/components/Water";
-import {Player} from "src:/components/Player";
-import {Sand} from "src:/components/Sand";
+import {Grass} from "src:/games/mura/components/Grass/index.ts";
+import {Water} from "src:/games/mura/components/Water/index.ts";
+import {Player} from "src:/games/mura/components/Player/index.ts";
+import {Sand} from "src:/games/mura/components/Sand/index.ts";
 import {CHUNK_SIZE} from "src:/scenes/SceneSettings.ts";
-import {Wall} from "src:/components/Wall";
-import {Floor} from "src:/components/Floor";
-import {Door} from "src:/components/Door";
-import {Window} from "src:/components/Window";
+import {Wall} from "src:/games/mura/components/Wall/index.ts";
+import {Floor} from "src:/games/mura/components/Floor/index.ts";
+import {Door} from "src:/games/mura/components/Door/index.ts";
+import {Window} from "src:/games/mura/components/Window/index.ts";
 
 enum MapSymbol {
   GRASS = '.',

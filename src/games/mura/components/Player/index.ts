@@ -5,8 +5,8 @@ import { ServiceProvider } from 'src:/services/ServiceProvider';
 import { Vector } from 'src:/lib/vector';
 import {AnimationNode, PlayAnimationEntry} from "src:/nodes/Node/CanvasNode/AnimationNode";
 import {CHUNK_SIZE} from "src:/scenes/SceneSettings.ts";
-import {Camera} from "src:/components/Player/camera.ts";
-import {CollisionController} from "src:/components/Player/collisionController.ts";
+import {Camera} from "src:/games/mura/components/Player/camera";
+import {CollisionController} from "src:/games/mura/components/Player/collisionController";
 
 type PlayerAnimation = 'stay' | 'move'
 export class Player extends AnimationNode<PlayerAnimation>{
