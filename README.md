@@ -2,6 +2,8 @@
 
 Here lies a game engine I build in a spare time for fun. It uses plain browser canvas2d for graphics without any dependencies (maybe yet).
 
+You can checkout current state here(space invaders): https://mura.pungy.me/
+
 ## Structure
 
 * **src/main.ts** - The game entry point and engine initialization (must be abstracted up)
