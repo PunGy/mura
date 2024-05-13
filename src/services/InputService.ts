@@ -26,12 +26,12 @@ export class InputService {
     //     return keys
     // }
     setKeyStackFor(group: string, keys: Array<string>) {
-        const keysGroup = this.keyStacks.get(group) ?? new UniqueStack()
         keys.forEach(key => {
-            keysGroup.push(key)
             this.keyToGroup.set(key, group)
         })
-        this.keyStacks.set(group, keysGroup)
+        if (!this.keyStacks.has(group)) {
+            this.keyStacks.set(group, new UniqueStack())
+        }
     }
 
     isPressed(key: string) {
@@ -50,7 +50,7 @@ export class InputService {
         document.addEventListener('keydown', (event) => {
             const code = event.code
             this.pressedKeys.add(code)
-            
+
             const keyGroup = this.keyToGroup.get(code)
             if (keyGroup) {
                 const stack = this.keyStacks.get(keyGroup)

@@ -33,6 +33,7 @@ export class Player extends SpriteNode {
         const scene = ServiceProvider.get('SceneService').activeScene
 
         const activeMovementKey = inputService.activeKeyOf('movement')
+        console.log(activeMovementKey)
         if (activeMovementKey === 'ArrowLeft') {
             this.position.x = Math.max(VIEWPORT_PADDING, this.position.x - this.speed * delta)
         } else if (activeMovementKey === 'ArrowRight') {
