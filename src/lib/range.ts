@@ -63,8 +63,11 @@ export class Range<T = number> {
         }
 
         const nextCursor: T = typeof this.#step === 'function' 
+            // @ts-expect-error fix later
             ? this.#step(this.#cursor, this.#iteration) 
+            // @ts-expect-error fix later
             : this.#cursor + this.#step
+            // @ts-expect-error fix later
         const isLast = this.#to <= nextCursor
         const res = { value: this.#cursor, done: isLast, i: this.#iteration }
         this.#cursor = nextCursor
@@ -73,11 +76,11 @@ export class Range<T = number> {
         this.#previous = res
         return res
     }
-    static next(range) {
+    static next<T>(range: Range<T>) {
         return range.next()
     }
 
-    step(stepFn) {
+    step(stepFn: (x: T) => T) {
         this.#step = stepFn
         return this
     }
@@ -85,8 +88,8 @@ export class Range<T = number> {
     array() {
         return [...this]
     }
-    static makeArray(range) {
-        return range.makeArray()
+    static array<T>(range: Range<T>) {
+        return range.array()
     }
 
     iterate(func: (t: T, i: number) => boolean | void) {
@@ -98,7 +101,7 @@ export class Range<T = number> {
         } while (toContinue && !inst.done)
     }
 
-    take(toOrFrom, toOrNull) {
+    take(toOrFrom: number, toOrNull?: number) {
         let from = 0
         let to = toOrFrom
         if (toOrNull != null) {
@@ -106,7 +109,7 @@ export class Range<T = number> {
             to = toOrNull
         }
 
-        const result = []
+        const result: Array<T> = []
 
         this.iterate((val, i) => {
             console.log(val, i)
@@ -118,7 +121,7 @@ export class Range<T = number> {
 
         return result
     }
-    static take(range, toOrFrom, toOrNull) {
+    static take<T>(range: Range<T>, toOrFrom: number, toOrNull: number) {
         return range.take(toOrFrom, toOrNull)
     }
 
@@ -147,7 +150,7 @@ export class Range<T = number> {
         return range 
     }
 
-    filter(predicate) {
+    filter(predicate: (el: T) => boolean) {
         const range = this.clone()
         const next = range.next.bind(range)
         range.next = () => {
@@ -160,19 +163,20 @@ export class Range<T = number> {
         return range
     }
 
-    fold(fn, acc) {
+    fold<K>(fn: (acc: K, el: T) => K, acc: K): Range<K> {
         const range = this.clone()
         const next = range.next.bind(range)
         range.next = () => {
             const inst = next()
             acc = fn(acc, inst.value)
+            // @ts-expect-error fix later
             inst.value = acc
             return inst
         }
-        return range
+        return range as unknown as Range<K>
     }
 
-    slice(toOrFrom, toOrNull) {
+    slice(toOrFrom: number, toOrNull: number | null) {
         const range = this.clone()
         let from = 0
         let to = toOrFrom

@@ -27,11 +27,14 @@
                 "./src/*"
             ],
             "game:/*": [
-                "src/games/spaceInvaders/*"
+                "./src/games/spaceInvaders/*"
             ]
         }
     },
     "include": [
         "src"
+    ],
+    "exclude": [
+        "./src/games/mura"
     ]
 }
