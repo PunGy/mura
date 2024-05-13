@@ -1,3 +1,4 @@
+import { assertNil } from "src:/lib";
 import {UniqueStack} from "src:/lib/stack.ts";
 
 type EventCallback = () => void;
@@ -8,17 +9,33 @@ type EventObject = {
 }
 
 export class InputService {
-    private keyStack = new UniqueStack<string>()
+    private keyStacks: Map<string, UniqueStack<string>> = new Map()
+    private keyToGroup: Map<string, string> = new Map()
     private events: Record<string, EventObject> = {}
+    private pressedKeys = new Set<string>()
     // private keyupEvents: Record<string, EventObject> = {}
 
-    get activeKey() {
-        return this.keyStack.peek()
+    activeKeyOf(group: string) {
+        if (this.keyStacks.has(group)) {
+            return this.keyStacks.get(group)!.peek()
+        }
     };
-    get keysPressed() {
-        const keys: Record<string, boolean> = {}
-        this.keyStack.forEach(key => keys[key] = true)
-        return keys
+    // get keysPressed() {
+    //     const keys: Record<string, boolean> = {}
+    //     this.keyStack.forEach(key => keys[key] = true)
+    //     return keys
+    // }
+    setKeyStackFor(group: string, keys: Array<string>) {
+        const keysGroup = this.keyStacks.get(group) ?? new UniqueStack()
+        keys.forEach(key => {
+            keysGroup.push(key)
+            this.keyToGroup.set(key, group)
+        })
+        this.keyStacks.set(group, keysGroup)
+    }
+
+    isPressed(key: string) {
+        return this.pressedKeys.has(key)
     }
 
     registerKeyPress(key: string, callback: EventCallback) {
@@ -32,7 +49,15 @@ export class InputService {
     init() {
         document.addEventListener('keydown', (event) => {
             const code = event.code
-            this.keyStack.push(code)
+            this.pressedKeys.add(code)
+            
+            const keyGroup = this.keyToGroup.get(code)
+            if (keyGroup) {
+                const stack = this.keyStacks.get(keyGroup)
+                assertNil(stack)
+                stack.push(code)
+            }
+
             if (code in this.events && !this.events[code].locked) {
                 const cfg = this.events[code]
                 cfg.callback()
@@ -41,7 +66,15 @@ export class InputService {
         })
         document.addEventListener('keyup', (event) => {
             const code = event.code
-            this.keyStack.delete(event.code)
+            this.pressedKeys.delete(code)
+
+            const keyGroup = this.keyToGroup.get(code)
+            if (keyGroup) {
+                const stack = this.keyStacks.get(keyGroup)
+                assertNil(stack)
+                stack.delete(code)
+            }
+
             if (code in this.events && this.events[code].locked) {
                 this.events[code].locked = false 
             }

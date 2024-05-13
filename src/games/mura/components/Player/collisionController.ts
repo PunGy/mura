@@ -1,7 +1,6 @@
 import {Node} from 'src:/nodes/Node'
 import {Vector} from "src:/lib/vector.ts";
 import {ServiceProvider} from "src:/services/ServiceProvider.ts";
-import {CHUNK_SIZE} from "src:/scenes/SceneSettings.ts";
 
 export class CollisionController extends Node {
     parent: Node;
