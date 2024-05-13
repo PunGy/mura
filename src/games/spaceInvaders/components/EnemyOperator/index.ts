@@ -3,15 +3,21 @@ import { ServiceProvider } from "src:/services/ServiceProvider"
 import { Enemy, EnemyType } from "../Enemy"
 import { Node } from "src:/nodes/Node"
 
+const SCREEN_PADDING = 40
+const BETWEEN_PADDING = 10
 export class EnemyOperator extends Node {
     enemies: Array<Enemy> = []
+    enemyWidth: number = 0
+    enemyHeight: number = 0
 
     init() {
         const scene = ServiceProvider.get('SceneService').activeScene
 
         const { width, height } = new Enemy(EnemyType.RED)
-        new Range(40, (height + 10) * 5, height + 10).iterate((y, i) => {
-            new Range(40, (width + 10) * 11, width + 10).iterate(x => {
+        this.enemyWidth = width
+        this.enemyHeight = height
+        new Range(SCREEN_PADDING, (height + BETWEEN_PADDING) * 5, height + BETWEEN_PADDING).iterate((y, i) => {
+            new Range(SCREEN_PADDING, (width + BETWEEN_PADDING) * 11, width + BETWEEN_PADDING).iterate(x => {
                 let type = EnemyType.GREEN
                 if (i === 1) {
                     type = EnemyType.RED
@@ -27,10 +33,10 @@ export class EnemyOperator extends Node {
                 scene.addNode(enemy)
             })
         })
-        this.position.x = 40
-        this.position.y = 40
-        this.width = (width + 10) * 11
-        this.height = (height + 10) * 5
+        this.position.x = SCREEN_PADDING
+        this.position.y = SCREEN_PADDING
+        this.width = (width + BETWEEN_PADDING) * 11
+        this.height = (height + BETWEEN_PADDING) * 5
     }
 
 
@@ -40,32 +46,35 @@ export class EnemyOperator extends Node {
     private direction = 1
     act(delta: number) {
         if (this.moveDelta >= this.moveTimer) {
-            this.moveDelta = 0
-            const e = this.enemies[0]
-            const shifyBy = (e.width / 4) * (this.direction ? 1 : -1)
-            this.enemies.forEach(enemy => {
-                enemy.position.x += shifyBy
-            })
-            this.position.x += shifyBy
-
+            const { position, width, enemyWidth, enemyHeight } = this
             const viewport = ServiceProvider.get('ViewportService')
+
             let changedDirection = false
-            if (this.position.x + this.width >= viewport.width - 40) {
+            const moveXBy = (enemyWidth / 4) * (this.direction ? 1 : -1)
+
+            // if moving right, check is the next move would be out of bound
+            if (this.direction && position.x + width + moveXBy > viewport.width - SCREEN_PADDING) {
                 this.direction = 0
                 changedDirection = true
-            } else if (this.position.x <= 40) {
+            // same for moving left
+            } else if (!this.direction && position.x + moveXBy <= SCREEN_PADDING) {
                 this.direction = 1
                 changedDirection = true
             }
 
             if (changedDirection) {
-                const e = this.enemies[0]
-                const shiftY = e.height + 10
-                this.position.y += shiftY
+                const moveYBy = enemyHeight + BETWEEN_PADDING
+                this.position.y += moveYBy
                 this.enemies.forEach(enemy => {
-                    enemy.position.y += shiftY
+                    enemy.position.y += moveYBy
                 })
+            } else {
+                this.enemies.forEach(enemy => {
+                    enemy.position.x += moveXBy
+                })
+                this.position.x += moveXBy
             }
+            this.moveDelta = 0
         } else {
             this.moveDelta += delta
         }
