@@ -38,10 +38,11 @@ export class Scene {
 
     getNodesFromGroups(groups: Set<string>): Array<Node> {
         const nodes: Array<Node> = []
+        const { collideGroups } = this
 
         groups.forEach(group => {
-            if (this.collideGroups.has(group)) {
-                nodes.push(...this.collideGroups.get(group)!)
+            if (collideGroups.has(group)) {
+                nodes.push(...collideGroups.get(group)!)
             }
         })
 

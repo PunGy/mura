@@ -54,6 +54,7 @@ declare global {
     interface Window {
         ServiceProvider: ServiceProvider;
     }
+
 }
 
 function gameLoop(delta: number, start: number) {

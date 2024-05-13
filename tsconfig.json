@@ -28,7 +28,7 @@
             ],
             "game:/*": [
                 "src/games/spaceInvaders/*"
-            ],
+            ]
         }
     },
     "include": [
