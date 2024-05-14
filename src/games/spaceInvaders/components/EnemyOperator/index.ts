@@ -9,6 +9,7 @@ export class EnemyOperator extends Node {
     enemies: Array<Enemy> = []
     enemyWidth: number = 0
     enemyHeight: number = 0
+    private speed: number = 0
 
     init() {
         const scene = ServiceProvider.get('SceneService').activeScene
@@ -37,6 +38,7 @@ export class EnemyOperator extends Node {
         this.position.y = SCREEN_PADDING
         this.width = (width + BETWEEN_PADDING) * 11
         this.height = (height + BETWEEN_PADDING) * 5
+        this.speed = width / 4
     }
 
 
@@ -46,11 +48,11 @@ export class EnemyOperator extends Node {
     private direction = 1
     act(delta: number) {
         if (this.moveDelta >= this.moveTimer) {
-            const { position, width, enemyWidth, enemyHeight } = this
+            const { position, width, enemyHeight } = this
             const viewport = ServiceProvider.get('ViewportService')
 
             let changedDirection = false
-            const moveXBy = (enemyWidth / 4) * (this.direction ? 1 : -1)
+            const moveXBy = this.speed * (this.direction ? 1 : -1)
 
             // if moving right, check is the next move would be out of bound
             if (this.direction && position.x + width + moveXBy > viewport.width - SCREEN_PADDING) {
@@ -68,6 +70,7 @@ export class EnemyOperator extends Node {
                 this.enemies.forEach(enemy => {
                     enemy.position.y += moveYBy
                 })
+                this.moveTimer -= 50
             } else {
                 this.enemies.forEach(enemy => {
                     enemy.position.x += moveXBy
