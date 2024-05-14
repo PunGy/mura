@@ -93,6 +93,11 @@ export class RenderService {
     private canvas: HTMLCanvasElement
     private readonly ctx: CanvasRenderingContext2D
 
+    readonly defaultFontStyle = 'Joystix Monospace'
+    readonly defaultFontSize = 16
+    readonly defaultFontColor = 'white'
+
+
     offsetX = 0;
     offsetY = 0;
 
@@ -102,7 +107,16 @@ export class RenderService {
 
         assert(!isNil(ctx), 'Cannot create 2d context')
 
+
         this.ctx = ctx
+        this.ctx.font = this.getFont()
+
+
+        console.log(this.ctx.font)
+    }
+
+    getFont(fontSize = this.defaultFontSize, fontStyle = this.defaultFontStyle) {
+        return `${fontSize}px ${fontStyle}`
     }
 
     getCtx() {
@@ -122,6 +136,22 @@ export class RenderService {
         } else {
             return new DrawSpriteBuilder(this.ctx, img)
         }
+    }
+
+    text(input: string, x: number, y: number, style?: { fontSize?: number, fontStyle?: string, color?: string }) {
+        const { ctx } = this
+
+        const appliedStyle = {
+            size: style?.fontSize ?? this.defaultFontSize,
+            style: style?.fontStyle ?? this.defaultFontStyle,
+            color: style?.color ?? this.defaultFontColor
+        }
+        ctx.save()
+        ctx.font = this.getFont(appliedStyle.size, appliedStyle.style)
+        ctx.fillStyle = appliedStyle.color
+
+        ctx.fillText(input, x, y)
+        ctx.restore()
     }
 
     clear() {

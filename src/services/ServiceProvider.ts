@@ -13,17 +13,17 @@ type Services = {
 }
 
 export class ServiceProvider {
-  static _services: Services
+    static _services: Services
 
-  static registerServices(services: Services) {
-    ServiceProvider._services = services
-  }
+    static registerServices(services: Services) {
+        ServiceProvider._services = services
+    }
 
-  static get<S extends keyof Services>(service: S): Services[S] {
-    return ServiceProvider._services[service]
-  }
+    static get<S extends keyof Services>(service: S): Services[S] {
+        return ServiceProvider._services[service]
+    }
 
-  static registerService<S extends keyof Services>(serviceName: S, service: Services[S]): Services[S] {
-    return ServiceProvider._services[serviceName] = service
-  }
+    static registerService<S extends keyof Services>(serviceName: S, service: Services[S]): Services[S] {
+        return ServiceProvider._services[serviceName] = service
+    }
 }

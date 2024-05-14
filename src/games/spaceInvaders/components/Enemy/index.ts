@@ -14,6 +14,11 @@ const enemyTypeToSprite = {
     [EnemyType.YELLOW]: YellowEnemySprite,
     [EnemyType.GREEN]: GreenEnemySprite,
 }
+const enemyTypeToReward = {
+    [EnemyType.RED]: 200,
+    [EnemyType.YELLOW]: 150,
+    [EnemyType.GREEN]: 100,
+}
 
 export class Enemy extends SpriteNode {
     readonly type: EnemyType
@@ -22,10 +27,13 @@ export class Enemy extends SpriteNode {
 
     collidable = true
     collideGroup = new Set(['enemy'])
+    
+    readonly reward: number
 
     constructor(type: EnemyType) {
         super(enemyTypeToSprite[type])
         this.type = type
+        this.reward = enemyTypeToReward[type]
     }
 
     render() {

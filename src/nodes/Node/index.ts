@@ -32,11 +32,19 @@ export class Node {
         if (this.collidable) {
             const node = this.getCollision()
             if (node) {
-                this.onCollided(node)
+                this.collisionOccured(node)
             }
         }
     }
-    onCollided(node: Node): void {} 
+
+    protected onCollisionCallback?: (node: Node) => void;
+    onCollided(cb: (node: Node) => void) {
+        this.onCollisionCallback = cb
+    }
+
+    protected collisionOccured(node: Node): void {
+        this.onCollisionCallback?.(node)
+    } 
 
     protected getCollision(): Node | undefined {
         if (!this.collidable) return
