@@ -1,11 +1,8 @@
 import { CanvasNode } from "src:/nodes/Node/CanvasNode";
 import { ServiceProvider } from "src:/services/ServiceProvider";
+import { MainScene } from "../scenes/MainScene";
 
-export class Background extends CanvasNode {
-    constructor() {
-        super()
-    }
-
+export class Background extends CanvasNode<MainScene> {
     init() {
         const viewportService = ServiceProvider.get('ViewportService')
         this.width = viewportService.width

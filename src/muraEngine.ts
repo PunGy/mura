@@ -7,9 +7,9 @@ import { ViewportService } from './services/ViewportService'
 import { isCanvas, assert, assertNil } from './lib'
 import { InputService } from './services/InputService'
 import {SceneService} from "src:/services/SceneService.ts";
-import {MainScene} from "src:/games/spaceInvaders/scenes/MainScene";
+import { Scene } from './scenes/Scene'
 
-async function main() {
+export async function muraEngine(InitialSceneClass: new () => Scene) {
     const canvasEl = document.getElementById('world')
 
     assertNil(canvasEl, 'Cannot find canvas element!')
@@ -19,7 +19,7 @@ async function main() {
     const renderService = new RenderService(canvasEl)
     const viewportService = new ViewportService(canvasEl, 800, 600)
     const inputService = new InputService()
-    const sceneService = new SceneService(new MainScene())
+    const sceneService = new SceneService()
 
     ServiceProvider.registerServices({
         'ViewportService': viewportService,
@@ -33,6 +33,7 @@ async function main() {
     viewportService.toggleInCenter()
     inputService.init()
 
+    sceneService.setActiveScene(new InitialSceneClass())
     const sceneInitialization = sceneService.activeScene.init()
     if (sceneInitialization instanceof Promise)
         await sceneInitialization
@@ -43,7 +44,7 @@ async function main() {
             start = previousTimeStamp = timeStamp
 
         delta = timeStamp - previousTimeStamp
-        gameLoop(delta, start)
+        gameLoop(delta)
         previousTimeStamp = timeStamp
         window.requestAnimationFrame(f)
     }
@@ -57,7 +58,7 @@ declare global {
 
 }
 
-function gameLoop(delta: number, start: number) {
+function gameLoop(delta: number) {
     const sceneService = ServiceProvider.get('SceneService')
 
     sceneService.activeScene.nodesTick(delta)
@@ -65,4 +66,3 @@ function gameLoop(delta: number, start: number) {
     // renderService.rect(CHUNK_SIZE * 4, 0, CHUNK_SIZE, CHUNK_SIZE, '#000');
 }
 
-main()

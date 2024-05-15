@@ -110,9 +110,6 @@ export class RenderService {
 
         this.ctx = ctx
         this.ctx.font = this.getFont()
-
-
-        console.log(this.ctx.font)
     }
 
     getFont(fontSize = this.defaultFontSize, fontStyle = this.defaultFontStyle) {

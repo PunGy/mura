@@ -1,4 +1,10 @@
-import {Scene} from "src:/scenes/Scene.ts";
+import { Scene } from "src:/scenes/Scene.ts";
+
+class EmptyScene extends Scene {
+    init() {
+        throw new Error('You need to initialize scene your scene!')
+    }
+}
 
 export class SceneService {
     private _activeScene: Scene;
@@ -11,7 +17,7 @@ export class SceneService {
         this._activeScene = scene
     }
 
-    constructor(initialScene: Scene) {
+    constructor(initialScene: Scene = new EmptyScene()) {
         this._activeScene = initialScene
     }
 }

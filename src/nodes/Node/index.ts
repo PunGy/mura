@@ -1,8 +1,9 @@
 import { assert } from "src:/lib";
 import { Vector } from "src:/lib/vector";
+import { Scene } from "src:/scenes/Scene";
 import {ServiceProvider} from "src:/services/ServiceProvider.ts";
 
-export class Node {
+export class Node<T extends Scene = Scene> {
     private static lastId = 0
     static issueId() {
         return Node.lastId++
@@ -23,8 +24,11 @@ export class Node {
     public width: number = 1
     public height: number = 1
 
-    constructor() {
+    public scene: T
+
+    constructor(scene: T) {
         this.id = Node.issueId()
+        this.scene = scene
     }
 
     init(): void | Promise<void> {};

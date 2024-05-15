@@ -1,13 +1,14 @@
 import {CanvasNode} from "src:/nodes/Node/CanvasNode";
 import {ServiceProvider} from "src:/services/ServiceProvider.ts";
 import {Sprite} from "src:/services/RenderService.ts";
+import { Scene } from "src:/scenes/Scene";
 
-export class SpriteNode extends CanvasNode {
+export class SpriteNode<T extends Scene> extends CanvasNode<T> {
     private sprite: Sprite | null = null;
     private spritePath: string
 
-    constructor(path: string) {
-        super();
+    constructor(scene: T, path: string) {
+        super(scene);
         this.spritePath = path
     }
 

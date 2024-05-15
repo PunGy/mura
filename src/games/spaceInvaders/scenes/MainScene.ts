@@ -17,11 +17,11 @@ export class MainScene extends Scene {
 
     constructor() {
         super()
-        this.addNode(new Background())
-        this.addNode(new Player())
-        this.addNode(new EnemyOperator())
+        this.addNode(new Background(this))
+        this.addNode(new Player(this))
+        this.addNode(new EnemyOperator(this))
 
-        const score = new Label('Score: 0', 16)
+        const score = new Label(this, 'Score: 0', 16)
         score.position.x = 10
         score.position.y = 26
         this.scoreNode = score

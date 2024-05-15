@@ -1,14 +1,16 @@
 import { ServiceProvider } from "src:/services/ServiceProvider";
 import { CanvasNode } from "../CanvasNode";
+import { MainScene } from "src:/games/spaceInvaders/scenes/MainScene";
 
-export class Label extends CanvasNode {
+export class Label extends CanvasNode<MainScene> {
 
     constructor(
+        scene: MainScene,
         public text: string,
         public size?: number,
         public color?: string,
     ) {
-        super()
+        super(scene)
     }
 
     render() {
