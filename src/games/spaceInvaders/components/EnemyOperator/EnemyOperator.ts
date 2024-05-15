@@ -70,6 +70,8 @@ export class EnemyOperator extends CanvasNode<MainScene> {
         this.position.y = Y_SCREEN_PADDING
         this.width = (this.enemyWidth + BETWEEN_PADDING) * 11 - BETWEEN_PADDING
         this.height = (this.enemyHeight + BETWEEN_PADDING) * 5 - BETWEEN_PADDING
+        this.direction = 1
+        this.moveDelta = 0
     }
 
     recalculateBoundingBox() {
@@ -102,7 +104,10 @@ export class EnemyOperator extends CanvasNode<MainScene> {
         this.position.y = minY
     }
 
-    private moveTimer = 700
+    timerDecreaseStep = 50
+
+    static baseSpeed = 700
+    private moveTimer = EnemyOperator.baseSpeed 
     private moveDelta = 0
     // 1 - right; 0 - left
     private direction = 1
@@ -120,6 +125,7 @@ export class EnemyOperator extends CanvasNode<MainScene> {
     move() {
         const { position, width, enemyHeight } = this
         const viewport = ServiceProvider.get('ViewportService')
+        const scene = this.scene
 
         let changedDirection = false
         const moveXBy = this.speed * (this.direction ? 1 : -1)
@@ -137,14 +143,34 @@ export class EnemyOperator extends CanvasNode<MainScene> {
         if (changedDirection) {
             if (this.position.y + this.height >= viewport.height - viewport.height / 5) {
                 this.stop = true
-                this.scene.gameover()
+                scene.gameover()
             }
             const moveYBy = enemyHeight + BETWEEN_PADDING
             this.position.y += moveYBy
             this.enemies.forEach(enemy => {
                 enemy.position.y += moveYBy
             })
-            this.moveTimer = Math.max(this.moveTimer - 50, 150)
+            const { moveTimer: currentSpeed } = this
+            let speedIncreaseOn = 0
+            let maxSpeed = 1
+            const { baseSpeed } = EnemyOperator
+            if (currentSpeed > baseSpeed - 75 * 3) {
+                speedIncreaseOn = 75
+            } else if (currentSpeed > 300) {
+                speedIncreaseOn = 50 
+            } else {
+                speedIncreaseOn = 30
+            }
+    
+            if (scene.level === 1) {
+                maxSpeed = 500
+            } else if (scene.level === 2) {
+                maxSpeed = 300
+            } else {
+                maxSpeed = 150
+            }
+
+            this.moveTimer = Math.max(this.moveTimer - speedIncreaseOn, maxSpeed)
         } else {
             this.enemies.forEach(enemy => {
                 enemy.position.x += moveXBy

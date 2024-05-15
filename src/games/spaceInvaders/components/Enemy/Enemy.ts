@@ -19,9 +19,9 @@ const enemyTypeToSprite = {
     [EnemyType.GREEN]: GreenEnemySprite,
 }
 const enemyTypeToReward = {
-    [EnemyType.RED]: 200,
-    [EnemyType.YELLOW]: 150,
-    [EnemyType.GREEN]: 100,
+    [EnemyType.RED]: 40,
+    [EnemyType.YELLOW]: 20,
+    [EnemyType.GREEN]: 10,
 }
 
 export class Enemy extends SpriteNode<MainScene> {
