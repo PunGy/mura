@@ -8,6 +8,7 @@ import { isCanvas, assert, assertNil } from './lib'
 import { InputService } from './services/InputService'
 import {SceneService} from "src:/services/SceneService.ts";
 import { Scene } from './scenes/Scene'
+import { AudioService } from './services/AudioService'
 
 export async function muraEngine(InitialSceneClass: new () => Scene) {
     const canvasEl = document.getElementById('world')
@@ -20,6 +21,7 @@ export async function muraEngine(InitialSceneClass: new () => Scene) {
     const viewportService = new ViewportService(canvasEl, 800, 600)
     const inputService = new InputService()
     const sceneService = new SceneService()
+    const audioService = new AudioService()
 
     ServiceProvider.registerServices({
         'ViewportService': viewportService,
@@ -27,6 +29,7 @@ export async function muraEngine(InitialSceneClass: new () => Scene) {
         'FileService': fileService,
         'InputService': inputService,
         'SceneService': sceneService,
+        'AudioService': audioService,
     })
 
     viewportService.initViewport()

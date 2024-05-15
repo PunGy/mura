@@ -1,8 +1,11 @@
 import { SpriteNode } from "src:/nodes/Node/CanvasNode/SpriteNode";
-import GreenEnemySprite from './green.png'
-import YellowEnemySprite from './yellow.png'
-import RedEnemySprite from './red.png'
+import GreenEnemySprite from './assets/green.png'
+import YellowEnemySprite from './assets/yellow.png'
+import RedEnemySprite from './assets/red.png'
 import { MainScene } from "../../scenes/MainScene";
+import { ServiceProvider } from "src:/services/ServiceProvider";
+import { AudioPlayer } from "src:/services/AudioService";
+import { assertNil } from "src:/lib";
 
 export enum EnemyType {
     RED = 'red',
@@ -28,8 +31,9 @@ export class Enemy extends SpriteNode<MainScene> {
 
     collidable = true
     collideGroup = new Set(['enemy'])
-    
+ 
     readonly reward: number
+    destroySound: AudioPlayer | null = null
 
     constructor(scene: MainScene, type: EnemyType) {
         super(scene, enemyTypeToSprite[type])

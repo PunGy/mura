@@ -1,8 +1,11 @@
 import { SpriteNode } from "src:/nodes/Node/CanvasNode/SpriteNode";
-import PlayerSprite from './player.png'
+import PlayerSprite from './assets/player.png'
 import { ServiceProvider } from "src:/services/ServiceProvider";
 import { Bullet, BulletType } from "../Bullet";
 import { MainScene } from "../../scenes/MainScene";
+import { AudioPlayer } from "src:/services/AudioService";
+import ShootSound from './assets/shoot.wav'
+import { assertNil } from "src:/lib";
 
 const VIEWPORT_PADDING = 20
 
@@ -16,14 +19,18 @@ export class Player extends SpriteNode<MainScene> {
         super(scene, PlayerSprite)
     }
 
-    init() {
+    shootSound: AudioPlayer | null = null
+    async init() {
         const viewportService = ServiceProvider.get('ViewportService')
         const inputService = ServiceProvider.get('InputService')
+        const audioService = ServiceProvider.get('AudioService')
 
         inputService.setKeyStackFor('movement', ['ArrowLeft', 'ArrowRight'])
 
         this.position.x = viewportService.width / 2 - this.width / 2
         this.position.y = viewportService.height - this.height - VIEWPORT_PADDING
+
+        this.shootSound = await audioService.createPlayer(ShootSound, 'shoot')
 
         return super.init()
     }
@@ -50,8 +57,10 @@ export class Player extends SpriteNode<MainScene> {
             bullet.position.y = y - bullet.height
             bullet.onDestroyed(() => this.missleReady = true)
             bullet.onCollided((enemy) => {
-                scene.score = scene.score + enemy.reward
+                scene.enemyDestroyed(enemy)
             })
+            assertNil(this.shootSound)
+            this.shootSound.play()
 
             scene.addNode(bullet)
         }

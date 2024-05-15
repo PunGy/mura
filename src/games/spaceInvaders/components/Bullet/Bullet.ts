@@ -15,7 +15,7 @@ export enum BulletType {
 export class Bullet<T extends BulletType> extends CanvasNode<MainScene> {
     width = 5
     height = 13
-    speed = 1.6
+    speed = 0.7
 
     collidable = true
 
