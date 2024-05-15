@@ -24,8 +24,9 @@ export class SpriteNode<T extends Scene> extends CanvasNode<T> {
         }
     }
     render() {
+        super.render()
         if (this.sprite === null) {
-            console.log('Sprite is not initialized')
+            console.error('Sprite is not initialized')
             return
         }
 

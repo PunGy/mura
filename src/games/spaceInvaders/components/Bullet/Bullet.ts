@@ -15,7 +15,7 @@ export enum BulletType {
 export class Bullet<T extends BulletType> extends CanvasNode<MainScene> {
     width = 5
     height = 13
-    speed = 0.7
+    speed = 0.5
 
     collidable = true
 
@@ -47,8 +47,8 @@ export class Bullet<T extends BulletType> extends CanvasNode<MainScene> {
     }
 
     protected collisionOccured(node: Node): void {
-        super.collisionOccured(node)
         node.destroy()
+        super.collisionOccured(node)
         this.destroy()
     }
 

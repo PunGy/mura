@@ -40,6 +40,10 @@ export async function muraEngine(InitialSceneClass: new () => Scene) {
     const sceneInitialization = sceneService.activeScene.init()
     if (sceneInitialization instanceof Promise)
         await sceneInitialization
+    const sceneNodesInitialization = sceneService.activeScene.initNodesEffect
+    if (sceneNodesInitialization instanceof Promise) {
+        await sceneNodesInitialization
+    }
 
     let start: number, previousTimeStamp: number, delta: number;
     function f(timeStamp: number) {

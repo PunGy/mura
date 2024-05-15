@@ -7,10 +7,12 @@ export class Label extends CanvasNode<MainScene> {
     constructor(
         scene: MainScene,
         public text: string,
-        public size?: number,
+        public size: number = 16,
         public color?: string,
     ) {
         super(scene)
+        this.width = text.length * size
+        this.height = size
     }
 
     render() {

@@ -6,6 +6,9 @@ export class Scene {
     protected nodes: Map<number, Node> = new Map()
     collideGroups: Map<string, Array<Node>> = new Map()
 
+    protected nodesToInit: Array<Node> = []
+    protected initScheduled = false
+    initNodesEffect: Promise<void> | null = null
     addNode(node: Node) {
         this.nodes.set(node.id, node)
         if (node.collideGroup.size > 0) {
@@ -18,6 +21,15 @@ export class Scene {
                 }
             })
         }
+        if (!this.initScheduled) {
+            this.initScheduled = true
+            this.initNodesEffect = Promise.resolve().then(() => {
+                return this.initNodes()
+            }).then(() => {
+                this.initScheduled = false
+            })
+        }
+        this.nodesToInit.push(node)
     }
     removeNode(node: Node) {
         this.nodes.delete(node.id)
@@ -49,13 +61,16 @@ export class Scene {
         return nodes
     }
 
-    init(): void | Promise<void> {
+    initNodes() {
         const effects: Array<Promise<void>> = []
-        this.nodes.forEach((node) => {
+        for (let i = 0; i < this.nodesToInit.length; i++) {
+            const node = this.nodesToInit[i]
             const effect = node.init()
             if (effect instanceof Promise)
                 effects.push(effect)
-        })
+        }
+        this.nodesToInit = []
+        console.log(effects)
 
         if (effects.length > 0) {
             return Promise.allSettled(effects)
@@ -67,4 +82,6 @@ export class Scene {
                 })
         }
     }
+
+    init(): void | Promise<void> {}
 }

@@ -112,7 +112,6 @@ export class Range<T = number> {
         const result: Array<T> = []
 
         this.iterate((val, i) => {
-            console.log(val, i)
             if (i >= from) {
                 result.push(val)
             }

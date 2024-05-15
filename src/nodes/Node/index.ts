@@ -24,6 +24,9 @@ export class Node<T extends Scene = Scene> {
     public width: number = 1
     public height: number = 1
 
+    debug: boolean = false
+    debugColor: string = 'yellow'
+
     public scene: T
 
     constructor(scene: T) {
@@ -80,7 +83,6 @@ export class Node<T extends Scene = Scene> {
             this.collideGroup.forEach(group => {
                 const nodes = scene.collideGroups.get(group)!
                 const nodeInx = nodes.findIndex(node => node.id === this.id)
-                console.log(nodeInx)
                 assert(nodeInx >= 0, 'Cannot find node in group for deletion!!!')
 
                 nodes.splice(nodeInx, 1)
@@ -93,7 +95,7 @@ export class Node<T extends Scene = Scene> {
         this.destoyCallback = cb
     }
 
-    drawDebugRect(color = 'yellow') {
+    drawDebugRect(color = this.debugColor) {
         const renderService = ServiceProvider.get('RenderService')
         const ctx = renderService.getCtx()
 
