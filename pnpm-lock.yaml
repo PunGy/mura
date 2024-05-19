@@ -9,6 +9,7 @@ specifiers:
   eslint-plugin-import: ^2.29.1
   eslint-plugin-security: ^2.1.1
   globals: ^15.1.0
+  rollup: ^4.17.2
   typescript: ^5.4.5
   typescript-eslint: ^7.8.0
   vite: ^5.2.11
@@ -23,6 +24,7 @@ devDependencies:
   eslint-plugin-import: 2.29.1_y5tv4er7hyzjbhd52pfed53sfy
   eslint-plugin-security: 2.1.1
   globals: 15.1.0
+  rollup: 4.17.2
   typescript: 5.4.5
   typescript-eslint: 7.8.0_te743w6atip6hhlha3uq43n2xe
   vite: 5.2.11

@@ -161,7 +161,7 @@ export class EnemyOperator extends CanvasNode<MainScene> {
             } else {
                 speedIncreaseOn = 30
             }
-    
+
             if (scene.level === 1) {
                 maxSpeed = 500
             } else if (scene.level === 2) {
