@@ -1,5 +1,5 @@
-import { CanvasNode } from "src:/nodes/Node/CanvasNode";
-import { ServiceProvider } from "src:/services/ServiceProvider";
+import { CanvasNode } from "@mura/engine/dist/nodes/Node/CanvasNode";
+import { ServiceProvider } from "@mura/engine/dist/services/ServiceProvider";
 import { MainScene } from "../scenes/MainScene";
 
 export class Background extends CanvasNode<MainScene> {

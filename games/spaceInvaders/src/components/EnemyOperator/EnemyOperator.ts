@@ -1,15 +1,15 @@
-import { Range } from "src:/lib/range"
-import { ServiceProvider } from "src:/services/ServiceProvider"
+import { Range } from "@mura/engine/dist/lib/range"
+import { ServiceProvider } from "@mura/engine/dist/services/ServiceProvider"
 import { Enemy, EnemyType } from "../Enemy"
 import { MainScene } from "../../scenes/MainScene"
 import MovementSound1 from './assets/movement_1.wav'
 import MovementSound2 from './assets/movement_2.wav'
 import MovementSound3 from './assets/movement_3.wav'
 import MovementSound4 from './assets/movement_4.wav'
-import { AudioPlayer } from "src:/services/AudioService"
-import { assertNil } from "src:/lib"
-import { LinkedList } from "src:/lib/LinkedList"
-import { CanvasNode } from "src:/nodes/Node/CanvasNode"
+import { AudioPlayer } from "@mura/engine/dist/services/AudioService"
+import { assertNil } from "@mura/engine/dist/lib"
+import { LinkedList } from "@mura/engine/dist/lib/LinkedList"
+import { CanvasNode } from "@mura/engine/dist/nodes/Node/CanvasNode"
 
 const Y_SCREEN_PADDING = 40
 const X_SCREEN_PADDING = 20

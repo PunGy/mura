@@ -1,16 +1,16 @@
 import './assets/style.css'
-import { FileService } from './services/FileService'
-import { RenderService } from './services/RenderService'
-import { ServiceProvider } from './services/ServiceProvider'
-import { ViewportService } from './services/ViewportService'
+import { FileService } from './services/FileService.ts'
+import { RenderService } from './services/RenderService.ts'
+import { ServiceProvider } from './services/ServiceProvider.ts'
+import { ViewportService } from './services/ViewportService.ts'
 
-import { isCanvas, assert, assertNil } from './lib'
-import { InputService } from './services/InputService'
-import {SceneService} from "src:/services/SceneService.ts";
-import { Scene } from './scenes/Scene'
-import { AudioService } from './services/AudioService'
+import { isCanvas, assert, assertNil } from './lib/index.ts'
+import { InputService } from './services/InputService.ts'
+import {SceneService} from "./services/SceneService.ts";
+import { Scene } from './scenes/Scene.ts'
+import { AudioService } from './services/AudioService.ts'
 
-export async function muraEngine(InitialSceneClass: new () => Scene) {
+export async function mura(InitialSceneClass: new () => Scene) {
     const canvasEl = document.getElementById('world')
 
     assertNil(canvasEl, 'Cannot find canvas element!')

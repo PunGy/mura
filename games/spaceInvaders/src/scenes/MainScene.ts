@@ -1,14 +1,14 @@
-import { Scene } from "src:/scenes/Scene";
-import { Background } from "src:/games/spaceInvaders/components/Background";
-import { Player } from "src:/games/spaceInvaders/components/Player";
+import { Scene } from "@mura/engine/dist/scenes/Scene";
+import { Background } from "src:/components/Background";
+import { Player } from "src:/components/Player";
 import { EnemyOperator } from "../components/EnemyOperator";
-import { Label } from "src:/nodes/Node/UI/Label";
+import { Label } from "@mura/engine/dist/nodes/Node/UI/Label";
 import { Enemy } from "../components/Enemy";
 import GameoverTheme from './game_lost.wav'
 import DestroyEnemySound from './hit_target.wav'
-import { AudioPlayer } from "src:/services/AudioService";
-import { ServiceProvider } from "src:/services/ServiceProvider";
-import { assertNil } from "src:/lib";
+import { AudioPlayer } from "@mura/engine/dist/services/AudioService";
+import { ServiceProvider } from "@mura/engine/dist/services/ServiceProvider";
+import { assertNil } from "@mura/engine/dist/lib";
 
 export class MainScene extends Scene {
     private _score = 0;
@@ -28,8 +28,8 @@ export class MainScene extends Scene {
         this._level = newLevel
         this.levelLabel.text = `Level: ${newLevel}`
     }
-    scoreLabel: Label
-    levelLabel: Label
+    scoreLabel: Label<MainScene>
+    levelLabel: Label<MainScene>
 
     enemyOperator: EnemyOperator
 
