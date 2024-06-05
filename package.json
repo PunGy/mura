@@ -2,17 +2,9 @@
     "name": "@mura/repo",
     "version": "1.0.0",
     "description": "",
-    "workspaces": [
-        "engine/",
-        "games/**"
-    ],
     "scripts": {
-        "dev": "run-p dev:engine dev:space",
-        "dev:space": "pnpm --filter './games/spaceInvaders' run dev",
-        "dev:engine": "watch 'pnpm run build:engine' ./engine/src",
-        "build": "pnpm run -r build",
-        "build:engine": "pnpm --filter './engine' run build",
-        "build:space": "pnpm --filter './games/spaceInvaders' run build",
+        "dev": "vite",
+        "build": "vite build",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "license": "ISC",

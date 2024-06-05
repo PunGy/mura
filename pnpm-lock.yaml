@@ -67,6 +67,12 @@ importers:
         specifier: ^3.9.1
         version: 3.9.1(rollup@4.17.2)(typescript@5.4.5)(vite@5.2.11)
 
+  games/murlog:
+    dependencies:
+      '@mura/engine':
+        specifier: workspace:^0.0.1
+        version: link:../../engine
+
   games/spaceInvaders:
     dependencies:
       '@mura/engine':
