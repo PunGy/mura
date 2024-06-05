@@ -6,9 +6,10 @@ import { ViewportService } from './services/ViewportService.ts'
 
 import { isCanvas, assert, assertNil } from './lib/index.ts'
 import { InputService } from './services/InputService.ts'
-import {SceneService} from "./services/SceneService.ts";
+import { SceneService } from "./services/SceneService.ts";
 import { Scene } from './scenes/Scene.ts'
 import { AudioService } from './services/AudioService.ts'
+import { EventService } from './services/EventService.ts'
 
 export async function mura(InitialSceneClass: new () => Scene) {
     const canvasEl = document.getElementById('world')
@@ -22,6 +23,7 @@ export async function mura(InitialSceneClass: new () => Scene) {
     const inputService = new InputService()
     const sceneService = new SceneService()
     const audioService = new AudioService()
+    const eventService = new EventService()
 
     ServiceProvider.registerServices({
         'ViewportService': viewportService,
@@ -30,6 +32,7 @@ export async function mura(InitialSceneClass: new () => Scene) {
         'InputService': inputService,
         'SceneService': sceneService,
         'AudioService': audioService,
+        'EventService': eventService,
     })
 
     viewportService.initViewport()
@@ -66,9 +69,9 @@ declare global {
 }
 
 function gameLoop(delta: number) {
-    const sceneService = ServiceProvider.get('SceneService')
+    const eventService = ServiceProvider.get('EventService')
+    eventService.$tickSignal.next(delta)
 
-    sceneService.activeScene.nodesTick(delta)
     // const renderService = ServiceProvider.get('RenderService')
     // renderService.rect(CHUNK_SIZE * 4, 0, CHUNK_SIZE, CHUNK_SIZE, '#000');
 }

@@ -1,16 +1,24 @@
-import {Node} from "src:/nodes/Node";
-import {CanvasNode} from "src:/nodes/Node/CanvasNode";
-import {AnimationNode} from "src:/nodes/Node/CanvasNode/AnimationNode";
+import { Observable, Subject } from "rxjs";
+import { ReactiveObject } from "src:/lib/RectiveObject";
+import { Node } from "src:/nodes/Node";
+import { ServiceProvider } from "src:/services/ServiceProvider";
 
-export class Scene {
-    protected nodes: Map<number, Node> = new Map()
+export class Scene extends ReactiveObject {
+    private _nodes: Map<number, Node> = new Map()
+    private $_nodesChangedSignal: Subject<ReadonlyMap<number, Node>> = new Subject()
+    $nodesChangedSignal: Observable<ReadonlyMap<number, Node>> = this.$_nodesChangedSignal
     collideGroups: Map<string, Array<Node>> = new Map()
+
+    get nodes(): ReadonlyMap<number, Node> {
+        return this._nodes;
+    }
 
     protected nodesToInit: Array<Node> = []
     protected initScheduled = false
     initNodesEffect: Promise<void> | null = null
+
     addNode(node: Node) {
-        this.nodes.set(node.id, node)
+        this._nodes.set(node.id, node)
         if (node.collideGroup.size > 0) {
             node.collideGroup.forEach(group => {
                 const nodes = this.collideGroups.get(group)
@@ -32,20 +40,11 @@ export class Scene {
         this.nodesToInit.push(node)
     }
     removeNode(node: Node) {
-        this.nodes.delete(node.id)
+        this._nodes.delete(node.id)
+        this.$_nodesChangedSignal.next(this.nodes)
     }
-    getNodes(): Readonly<Array<Node>> {
+    getAllNodes(): Readonly<Array<Node>> {
         return Array.from(this.nodes.values())
-    }
-    nodesTick(delta: number) {
-        const nodes = this.nodes
-        for (const node of nodes.values()) {
-            node.act(delta)
-            if (node instanceof CanvasNode)
-                node.render()
-            if (node instanceof AnimationNode)
-                node.animate(delta)
-        }
     }
 
     getNodesFromGroups(groups: Set<string>): Array<Node> {
@@ -70,7 +69,6 @@ export class Scene {
                 effects.push(effect)
         }
         this.nodesToInit = []
-        console.log(effects)
 
         if (effects.length > 0) {
             return Promise.allSettled(effects)
@@ -83,5 +81,11 @@ export class Scene {
         }
     }
 
-    init(): void | Promise<void> {}
+    init(): void | Promise<void> {
+        this.safeSubscribe(ServiceProvider.get('EventService').$tickSignal, (delta) => {
+            this.nodes.forEach(node => {
+                node.act(delta)
+            })
+        })
+    }
 }

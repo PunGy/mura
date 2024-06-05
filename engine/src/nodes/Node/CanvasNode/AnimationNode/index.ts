@@ -1,7 +1,6 @@
 import { CanvasNode } from 'src:/nodes/Node/CanvasNode'
 import type {Sprite} from "src:/services/RenderService";
 import {ServiceProvider} from "src:/services/ServiceProvider.ts";
-import {CHUNK_SIZE} from "src:/scenes/SceneSettings.ts";
 import { Scene } from 'src:/scenes/Scene';
 
 export type PlayAnimationEntry = {
@@ -42,7 +41,7 @@ export class AnimationNode<T extends Scene, AnimationKeys extends PropertyKey> e
         return {
             resource: spriteSource,
             renderer: renderService.getSpriteRenderer(spriteSource)
-                .size(this.width * CHUNK_SIZE, this.height * CHUNK_SIZE)
+                .size(this.width, this.height)
         }
     }
     static staticFrameAnimation(sprite: StaticAnimationEntry['sprite']): StaticAnimationEntry {

@@ -7,10 +7,10 @@ export class Background extends CanvasNode<MainScene> {
         const viewportService = ServiceProvider.get('ViewportService')
         this.width = viewportService.width
         this.height = viewportService.height
+        this.safeSubscribe(this.$renderSignal, () => {
+            ServiceProvider.get('RenderService')
+                .rect(0, 0, this.width, this.height, 'black')
+        })
     }
 
-    render(): void {
-        ServiceProvider.get('RenderService')
-            .rect(0, 0, this.width, this.height, 'black')
-    }
 }
