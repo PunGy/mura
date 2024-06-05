@@ -1,5 +1,5 @@
-import { assertNil } from "src:/lib";
-import {UniqueStack} from "src:/lib/stack.ts";
+import { assertNil } from "engine:/lib";
+import {UniqueStack} from "engine:/lib/stack.ts";
 
 type EventCallback = () => void;
 

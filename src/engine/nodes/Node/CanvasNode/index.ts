@@ -1,6 +1,6 @@
 import { Observable, Subject } from 'rxjs';
-import { Node } from 'src:/nodes/Node'
-import { Scene } from 'src:/scenes/Scene';
+import { Node } from 'engine:/nodes/Node'
+import { Scene } from 'engine:/scenes/Scene';
 
 export class CanvasNode<T extends Scene> extends Node<T> {
     constructor(scene: T) {

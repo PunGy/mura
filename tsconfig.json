@@ -20,6 +20,17 @@
         "alwaysStrict": true,
         "strictBindCallApply": true,
         "strictFunctionTypes": true,
-        "strictNullChecks": true
-    }
+        "strictNullChecks": true,
+        "paths": {
+            "engine:/*": [
+                "./src/engine/*"
+            ],
+            "game:/*": [
+                "./src/game/*"
+            ]
+        }
+    },
+    "include": [
+        "./src"
+    ]
 }

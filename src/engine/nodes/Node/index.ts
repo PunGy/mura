@@ -1,9 +1,9 @@
-import { assert } from "src:/lib";
-import { Scene } from "src:/scenes/Scene";
-import {ServiceProvider} from "src:/services/ServiceProvider.ts";
+import { assert } from "engine:/lib";
+import { Scene } from "engine:/scenes/Scene";
+import {ServiceProvider} from "engine:/services/ServiceProvider.ts";
 import { merge, BehaviorSubject, Observable, filter, Subject, Subscription, tap } from 'rxjs'
-import { ReactiveObject } from "src:/lib/RectiveObject";
-import { Vector, isCollidedNodes } from "src:/lib/geometry";
+import { ReactiveObject } from "engine:/lib/RectiveObject";
+import { Vector, isCollidedNodes } from "engine:/lib/geometry";
 
 
 export class Node<T extends Scene = Scene> extends ReactiveObject {

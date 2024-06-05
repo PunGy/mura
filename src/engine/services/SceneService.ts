@@ -1,4 +1,4 @@
-import { Scene } from "src:/scenes/Scene.ts";
+import { Scene } from "engine:/scenes/Scene.ts";
 
 class EmptyScene extends Scene {
     init() {

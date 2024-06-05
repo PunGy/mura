@@ -1,5 +1,5 @@
-import { ServiceProvider } from "src:/services/ServiceProvider";
-import { Scene } from "src:/scenes/Scene";
+import { ServiceProvider } from "engine:/services/ServiceProvider";
+import { Scene } from "engine:/scenes/Scene";
 import { CanvasNode } from "../CanvasNode";
 
 export class Label<T extends Scene> extends CanvasNode<T> {

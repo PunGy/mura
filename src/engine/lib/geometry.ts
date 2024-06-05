@@ -1,4 +1,4 @@
-import { type Node } from 'src:/nodes/Node'
+import { type Node } from 'engine:/nodes/Node'
 
 export interface XY {
     x: number;

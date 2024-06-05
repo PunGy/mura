@@ -1,7 +1,7 @@
-import {CanvasNode} from "src:/nodes/Node/CanvasNode";
-import {ServiceProvider} from "src:/services/ServiceProvider.ts";
-import {Sprite} from "src:/services/RenderService.ts";
-import { Scene } from "src:/scenes/Scene";
+import {CanvasNode} from "engine:/nodes/Node/CanvasNode";
+import {ServiceProvider} from "engine:/services/ServiceProvider.ts";
+import {Sprite} from "engine:/services/RenderService.ts";
+import { Scene } from "engine:/scenes/Scene";
 
 export class SpriteNode<T extends Scene> extends CanvasNode<T> {
     private sprite: Sprite | null = null;

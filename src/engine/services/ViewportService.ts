@@ -1,4 +1,4 @@
-import { assert, isNil } from "src:/lib"
+import { assert, isNil } from "engine:/lib"
 import { ServiceProvider } from "./ServiceProvider"
 
 export class ViewportService {

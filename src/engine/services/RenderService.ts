@@ -1,5 +1,5 @@
-import {assertNil, isNil, assert } from 'src:/lib'
-import {ServiceProvider} from "src:/services/ServiceProvider.ts";
+import {assertNil, isNil, assert } from 'engine:/lib'
+import {ServiceProvider} from "engine:/services/ServiceProvider.ts";
 
 export type Sprite = {
   resource: CanvasImageSource;
