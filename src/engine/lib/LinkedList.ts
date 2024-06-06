@@ -82,6 +82,38 @@ export class LinkedList<T> {
         return head
     }
 
+    prepend(node: ListNode<T>, value: T) {
+        const newNode = new ListNode(value)
+        if (node.prev) {
+            const prev = node.prev
+            prev.next = newNode
+            newNode.prev = prev
+        }
+        newNode.next = node
+        node.prev = newNode
+    }
+    pushAfter(node: ListNode<T>, value: T) {
+        const newNode = new ListNode(value)
+        if (node.next) {
+            const next = node.next
+            next.prev = newNode
+            newNode.next = next
+        }
+        newNode.prev = node
+        node.next = newNode
+    }
+
+    // WARNING: Use with cautions! You can only do this with nodes that belong to this LinkedList already!
+    // Otherwise, the linked list would be broken
+    setTail(node: ListNode<T>) {
+        this.tail = node
+    }
+    // WARNING: Use with cautions! You can only do this with nodes that belong to this LinkedList already!
+    // Otherwise, the linked list would be broken
+    setHead(node: ListNode<T>) {
+        this.head = node
+    }
+
     encycle() {
         if (this.size < 2) return this
         this.head!.prev = this.tail

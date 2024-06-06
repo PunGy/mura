@@ -1,4 +1,4 @@
 import { mura } from 'engine:/engine';
-import { MainScene } from "./scenes/MainScene";
+import { Level } from "./scenes/Level";
 
-mura(MainScene)
+mura(Level)

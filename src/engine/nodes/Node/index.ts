@@ -5,8 +5,8 @@ import { merge, BehaviorSubject, Observable, filter, Subject, Subscription, tap 
 import { ReactiveObject } from "engine:/lib/RectiveObject";
 import { Vector, isCollidedNodes } from "engine:/lib/geometry";
 
-
 export class Node<T extends Scene = Scene> extends ReactiveObject {
+    readonly _type = 'node'
     private static lastId = 0
     static issueId() {
         return Node.lastId++
@@ -54,7 +54,7 @@ export class Node<T extends Scene = Scene> extends ReactiveObject {
 
     public scene: T
 
-    private $boundingBoxChange = merge(this.$x, this.$y, this.$width, this.$height)
+    private $boundingBoxChange = merge(this.$position, this.$width, this.$height)
     private boundingBoxSub: Subscription | null = null
     constructor(scene: T) {
         super()
@@ -140,5 +140,16 @@ export class Node<T extends Scene = Scene> extends ReactiveObject {
             this.width,
             this.height,
         )
+    }
+
+    serialize() {
+        return {
+            position: this.position,
+            height: this.height,
+            width: this.width,
+            collidable: this.collidable,
+            id: this.id,
+            type: this._type,
+        }
     }
 }
