@@ -1,7 +1,6 @@
 import { Observable, Subject } from "rxjs";
 import { ReactiveObject } from "engine:/lib/RectiveObject";
 import { Node } from "engine:/nodes/Node";
-import { ServiceProvider } from "engine:/services/ServiceProvider";
 
 export class Scene extends ReactiveObject {
     private _nodes: Map<number, Node> = new Map()
@@ -81,11 +80,5 @@ export class Scene extends ReactiveObject {
         }
     }
 
-    init(): void | Promise<void> {
-        this.safeSubscribe(ServiceProvider.get('EventService').$tickSignal, (delta) => {
-            this.nodes.forEach(node => {
-                node.act(delta)
-            })
-        })
-    }
+    init(): void | Promise<void> {}
 }

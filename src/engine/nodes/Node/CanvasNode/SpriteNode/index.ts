@@ -7,20 +7,15 @@ export class SpriteNode<T extends Scene> extends CanvasNode<T> {
     protected sprite: Sprite | null = null;
     protected spritePath: string
 
-    constructor(scene: T, path: string) {
+    constructor(scene: T, path: string, subscribe = true) {
         super(scene);
         this.spritePath = path
 
-        this.safeSubscribe(this.$renderSignal, () => {
-            if (this.sprite === null) {
-                console.error('Sprite is not initialized')
-                return
-            }
-
-            this.sprite.renderer
-                .position(this.position.x, this.position.y)
-                .draw()
-        })
+        if (subscribe) {
+            this.safeSubscribe(this.$renderSignal, () => {
+                this.render()
+            })
+        }
     }
 
     async init() {

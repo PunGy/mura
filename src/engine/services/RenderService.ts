@@ -1,4 +1,4 @@
-import {assertNil, isNil, assert } from 'engine:/lib'
+import {assertNil, isNil, assert, assertIronicType } from 'engine:/lib'
 import {ServiceProvider} from "engine:/services/ServiceProvider.ts";
 
 export type Sprite = {
@@ -6,11 +6,12 @@ export type Sprite = {
   renderer: IDrawSpriteBuilder;
 }
 export interface IDrawSpriteBuilder {
-  position(x: number, y: number): DrawSpriteBuilder;
-  size(width: number, height: number): DrawSpriteBuilder;
-  crop(x: number, y: number, width: number, height: number): DrawSpriteBuilder;
-  invert(toInvert: boolean): DrawSpriteBuilder;
-  draw(): void;
+    position(x: number, y: number): DrawSpriteBuilder;
+    size(width: number, height: number): DrawSpriteBuilder;
+    crop(x: number, y: number, width: number, height: number): DrawSpriteBuilder;
+    invert(toInvert: boolean): DrawSpriteBuilder;
+    getImageSize(): { width: number, height: number };
+    draw(): void;
 }
 class DrawSpriteBuilder implements IDrawSpriteBuilder {
     private _ctx: CanvasRenderingContext2D;
@@ -48,15 +49,24 @@ class DrawSpriteBuilder implements IDrawSpriteBuilder {
         return this
     }
 
+    getImageSize() {
+        assertIronicType<HTMLImageElement>(this._img)
+        return {
+            width: this._img.width,
+            height: this._img.height,
+        }
+    }
+
     draw() {
         assertNil(this._x, 'You should assign the "x" position for drawing a sprite!')
         assertNil(this._y, 'You should assign the "y" position for drawing a sprite!')
+        assertIronicType<HTMLImageElement>(this._img)
         const renderingService = ServiceProvider.get('RenderService')
 
         let { _x: x, _y: y } = this
         if (this._invert) {
             this._ctx.save()
-            x = -x + (-(this._size ? this._size.width : (this._img as HTMLImageElement).width))
+            x = -x + (-(this._size ? this._size.width : this._img.width))
             this._ctx.scale(-1, 1)
 
             x = x + renderingService.offsetX
@@ -68,7 +78,10 @@ class DrawSpriteBuilder implements IDrawSpriteBuilder {
 
         switch (true) {
         case !isNil(this._crop):
-            assertNil(this._size, 'You should set size of the sprite during cropping!')
+            assertNil(this._size, 'You should set size of the sprite during cropping!');
+            // const imgWidthScale = this._img.width / this._crop.width
+            // const imgHeightScale = this._img.height / this._crop.height
+
             this._ctx.drawImage(
                 this._img,
                 this._crop.x, this._crop.y, this._crop.width, this._crop.height, // image coordinates

@@ -71,6 +71,7 @@ declare global {
 function gameLoop(delta: number) {
     const eventService = ServiceProvider.get('EventService')
     eventService.$tickSignal.next(delta)
+    eventService.$renderSignal.next(delta)
 
     // const renderService = ServiceProvider.get('RenderService')
     // renderService.rect(CHUNK_SIZE * 4, 0, CHUNK_SIZE, CHUNK_SIZE, '#000');

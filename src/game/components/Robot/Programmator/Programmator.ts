@@ -7,9 +7,13 @@ export class Programator {
     commandQueue: LinkedList<Command> = new LinkedList()
     private $_activeCommand = new BehaviorSubject<ListNode<Command> | null>(null)
     $activeCommand: Observable<ListNode<Command> | null> = this.$_activeCommand
-    done = true
 
     robot: Robot
+
+    get done() {
+        const command = this.$_activeCommand.value
+        return command && command === this.commandQueue.peekTail()
+    }
 
     constructor(robot: Robot) {
         this.robot = robot
@@ -19,17 +23,20 @@ export class Programator {
         this.commandQueue.prepend(before, newCommand)
     }
     pushCommand(newCommand: Command) {
+        console.log('command pushed', newCommand)
         this.commandQueue.pushBack(newCommand)
     }
 
     tick() {
         const command = this.$_activeCommand.value?.next ?? this.commandQueue.peekHead()
-        if (!command) {
-            this.done = true
-            return
+        if (command === null) {
+            console.warn('Nothing to execute')
+            return;
         }
-        this.done = false
+        console.log('executing command', command)
         command.value.run(this.robot)
-        this.$_activeCommand.next(command)
+        if (!this.done) {
+            this.$_activeCommand.next(command)
+        }
     }
 }

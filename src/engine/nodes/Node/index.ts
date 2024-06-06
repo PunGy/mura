@@ -101,10 +101,8 @@ export class Node<T extends Scene = Scene> extends ReactiveObject {
     }
     private $_destroyed = new Subject<void>()
     $destroySignal: Observable<void> = this.$_destroyed
-    private $_actSignal = new Subject<number>()
-    $actSignal: Observable<number> = this.$_actSignal
-    act(delta: number) {
-        this.$_actSignal.next(delta)
+    get $actSignal() {
+        return ServiceProvider.get('EventService').$tickSignal
     }
 
     destroy() {
