@@ -1,6 +1,6 @@
 # 2D Game Engine
 
-Here lies a game engine I build in a spare time for fun. It uses plain browser canvas2d for graphics without any dependencies (maybe yet).
+Here lies a game engine I build in a spare time for fun. It uses plain browser canvas2d for graphics and RxJS for state management.
 
 You can checkout current state here(space invaders): https://mura.pungy.me/
 
