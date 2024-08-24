@@ -14,6 +14,7 @@ You can checkout current state here(space invaders): https://mura.pungy.me/
 * **src/games/** - Developed games on top of the engine
 
 ## Roadmap
+- [x] Reactive state management
 - [x] Sound system
 - [ ] Multiplayer
 - [ ] AI
