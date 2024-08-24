@@ -1,11 +1,11 @@
-import { SpriteNode } from "src:/nodes/Node/CanvasNode/SpriteNode";
+import { SpriteNode } from "@mura/engine/dist/nodes/Node/CanvasNode/SpriteNode";
 import PlayerSprite from './assets/player.png'
-import { ServiceProvider } from "src:/services/ServiceProvider";
+import { ServiceProvider } from "@mura/engine/dist/services/ServiceProvider";
 import { Bullet, BulletType } from "../Bullet";
 import { MainScene } from "../../scenes/MainScene";
-import { AudioPlayer } from "src:/services/AudioService";
+import { AudioPlayer } from "@mura/engine/dist/services/AudioService";
 import ShootSound from './assets/shoot.wav'
-import { assertNil } from "src:/lib";
+import { assertNil } from "@mura/engine/dist/lib";
 
 const VIEWPORT_PADDING = 20
 

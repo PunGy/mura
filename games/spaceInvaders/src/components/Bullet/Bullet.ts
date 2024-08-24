@@ -1,6 +1,6 @@
-import { Node } from "src:/nodes/Node";
-import { CanvasNode } from "src:/nodes/Node/CanvasNode";
-import { ServiceProvider } from "src:/services/ServiceProvider";
+import { Node } from "@mura/engine/dist/nodes/Node";
+import { CanvasNode } from "@mura/engine/dist/nodes/Node/CanvasNode";
+import { ServiceProvider } from "@mura/engine/dist/services/ServiceProvider";
 import { Player } from "../Player";
 import { Enemy } from "../Enemy";
 import { MainScene } from "../../scenes/MainScene";

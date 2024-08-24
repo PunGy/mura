@@ -1,11 +1,11 @@
-import { SpriteNode } from "src:/nodes/Node/CanvasNode/SpriteNode";
+import { SpriteNode } from "@mura/engine/dist/nodes/Node/CanvasNode/SpriteNode";
 import GreenEnemySprite from './assets/green.png'
 import YellowEnemySprite from './assets/yellow.png'
 import RedEnemySprite from './assets/red.png'
 import { MainScene } from "../../scenes/MainScene";
-import { ServiceProvider } from "src:/services/ServiceProvider";
-import { AudioPlayer } from "src:/services/AudioService";
-import { assertNil } from "src:/lib";
+import { ServiceProvider } from "@mura/engine/dist/services/ServiceProvider";
+import { AudioPlayer } from "@mura/engine/dist/services/AudioService";
+import { assertNil } from "@mura/engine/dist/lib";
 
 export enum EnemyType {
     RED = 'red',

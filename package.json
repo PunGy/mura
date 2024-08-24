@@ -1,29 +1,35 @@
 {
-    "name": "mura",
+    "name": "@mura/repo",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "workspaces": [
+        "engine/",
+        "games/**"
+    ],
     "scripts": {
-        "dev": "vite",
-        "build": "tsc && vite build",
+        "dev": "run-p dev:engine dev:space",
+        "dev:space": "pnpm --filter './games/spaceInvaders' run dev",
+        "dev:engine": "watch 'pnpm run build:engine' ./engine/src",
+        "build": "pnpm run -r build",
+        "build:engine": "pnpm --filter './engine' run build",
+        "build:space": "pnpm --filter './games/spaceInvaders' run build",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "keywords": [],
-    "author": "",
     "license": "ISC",
     "devDependencies": {
-        "@eslint/js": "^9.2.0",
+        "@eslint/js": "^9.3.0",
         "@typescript-eslint/eslint-plugin": "^6.21.0",
         "@typescript-eslint/parser": "^6.21.0",
         "eslint": "^8.57.0",
         "eslint-import-resolver-typescript": "^3.6.1",
         "eslint-plugin-import": "^2.29.1",
         "eslint-plugin-security": "^2.1.1",
-        "globals": "^15.1.0",
-        "rollup": "^4.17.2",
+        "globals": "^15.2.0",
+        "npm-run-all": "^4.1.5",
         "typescript": "^5.4.5",
-        "typescript-eslint": "^7.8.0",
+        "typescript-eslint": "^7.9.0",
         "vite": "^5.2.11",
-        "vite-tsconfig-paths": "^4.3.2"
+        "vite-tsconfig-paths": "^4.3.2",
+        "watch": "^1.0.2"
     }
 }

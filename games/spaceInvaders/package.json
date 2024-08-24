@@ -1,0 +1,16 @@
+{
+    "name": "@mura/space_invaders",
+    "version": "1.0.0",
+    "description": "space invaders using",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@mura/engine": "workspace:^0.0.1"
+    }
+}
