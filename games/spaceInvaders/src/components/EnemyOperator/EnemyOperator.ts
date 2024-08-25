@@ -21,6 +21,19 @@ export class EnemyOperator extends CanvasNode<MainScene> {
     private speed: number = 0
     private audioCycle: LinkedList<AudioPlayer> | null = null
     // debug = true
+    
+    constructor(scene: MainScene) {
+        super(scene)
+        this.safeSubscribe(this.$actSignal, (delta) => {
+            if (this.stop) return;
+            if (this.moveDelta >= this.moveTimer) {
+                this.move()
+                this.moveDelta = 0
+            } else {
+                this.moveDelta += delta
+            }
+        })
+    }
 
     async init() {
         const { width, height } = new Enemy(this.scene, EnemyType.RED)
@@ -53,11 +66,10 @@ export class EnemyOperator extends CanvasNode<MainScene> {
                 enemy.position.x = x
                 enemy.position.y = y
 
-                enemy.onDestroyed(() => {
+                this.enemies.set(enemy.id, enemy)
+                enemy.$destroySignal.subscribe(() => {
                     this.enemies.delete(enemy.id)
                 })
-
-                this.enemies.set(enemy.id, enemy)
 
                 this.scene.addNode(enemy)
             })
@@ -111,15 +123,6 @@ export class EnemyOperator extends CanvasNode<MainScene> {
     private moveDelta = 0
     // 1 - right; 0 - left
     private direction = 1
-    act(delta: number) {
-        if (this.stop) return;
-        if (this.moveDelta >= this.moveTimer) {
-            this.move()
-            this.moveDelta = 0
-        } else {
-            this.moveDelta += delta
-        }
-    }
 
     stop = false
     move() {

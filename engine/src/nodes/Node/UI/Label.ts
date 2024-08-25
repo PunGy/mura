@@ -13,15 +13,15 @@ export class Label<T extends Scene> extends CanvasNode<T> {
         super(scene)
         this.width = text.length * size
         this.height = size
-    }
 
-    render() {
-        ServiceProvider.get('RenderService')
-            .text(
-                this.text,
-                this.position.x,
-                this.position.y,
-                (this.size ?? this.color) ? { fontSize: this.size, color: this.color } : undefined
-            )
+        this.safeSubscribe(this.$renderSignal, () => {
+            ServiceProvider.get('RenderService')
+                .text(
+                    this.text,
+                    this.position.x,
+                    this.position.y,
+                    (this.size ?? this.color) ? { fontSize: this.size, color: this.color } : undefined
+                )
+        })
     }
 }

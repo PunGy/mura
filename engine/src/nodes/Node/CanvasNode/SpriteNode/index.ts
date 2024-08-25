@@ -10,6 +10,17 @@ export class SpriteNode<T extends Scene> extends CanvasNode<T> {
     constructor(scene: T, path: string) {
         super(scene);
         this.spritePath = path
+
+        this.safeSubscribe(this.$renderSignal, () => {
+            if (this.sprite === null) {
+                console.error('Sprite is not initialized')
+                return
+            }
+
+            this.sprite.renderer
+                .position(this.position.x, this.position.y)
+                .draw()
+        })
     }
 
     async init() {
@@ -22,16 +33,5 @@ export class SpriteNode<T extends Scene> extends CanvasNode<T> {
             renderer: renderService.getSpriteRenderer(file)
                 .size(this.width, this.height)
         }
-    }
-    render() {
-        super.render()
-        if (this.sprite === null) {
-            console.error('Sprite is not initialized')
-            return
-        }
-
-        this.sprite.renderer
-            .position(this.position.x, this.position.y)
-            .draw()
     }
 }

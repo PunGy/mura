@@ -3,9 +3,7 @@ import GreenEnemySprite from './assets/green.png'
 import YellowEnemySprite from './assets/yellow.png'
 import RedEnemySprite from './assets/red.png'
 import { MainScene } from "../../scenes/MainScene";
-import { ServiceProvider } from "@mura/engine/dist/services/ServiceProvider";
 import { AudioPlayer } from "@mura/engine/dist/services/AudioService";
-import { assertNil } from "@mura/engine/dist/lib";
 
 export enum EnemyType {
     RED = 'red',
@@ -26,10 +24,7 @@ const enemyTypeToReward = {
 
 export class Enemy extends SpriteNode<MainScene> {
     readonly type: EnemyType
-    width = 40
-    height = 32
 
-    collidable = true
     collideGroup = new Set(['enemy'])
  
     readonly reward: number
@@ -37,11 +32,11 @@ export class Enemy extends SpriteNode<MainScene> {
 
     constructor(scene: MainScene, type: EnemyType) {
         super(scene, enemyTypeToSprite[type])
+
+        this.collidable = true
+        this.width = 40
+        this.height = 32
         this.type = type
         this.reward = enemyTypeToReward[type]
-    }
-
-    render() {
-        super.render()
     }
 }

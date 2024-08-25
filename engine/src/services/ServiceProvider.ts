@@ -1,9 +1,10 @@
-import { AudioService } from "./AudioService";
+import type { AudioService } from "./AudioService";
+import type { EventService } from "./EventService";
 import type { FileService } from "./FileService";
 import type { InputService } from "./InputService";
 import type { RenderService } from "./RenderService";
 import type { ViewportService } from "./ViewportService";
-import {SceneService} from "src:/services/SceneService.ts";
+import type { SceneService } from "./SceneService";
 
 type Services = {
     'RenderService': RenderService,
@@ -12,6 +13,7 @@ type Services = {
     'InputService': InputService,
     'SceneService': SceneService,
     'AudioService': AudioService,
+    'EventService': EventService,
 }
 
 export class ServiceProvider {

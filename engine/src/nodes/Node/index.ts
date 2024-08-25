@@ -1,81 +1,112 @@
 import { assert } from "src:/lib";
-import { Vector } from "src:/lib/vector";
 import { Scene } from "src:/scenes/Scene";
 import {ServiceProvider} from "src:/services/ServiceProvider.ts";
+import { merge, BehaviorSubject, Observable, filter, Subject, Subscription, tap } from 'rxjs'
+import { ReactiveObject } from "src:/lib/RectiveObject";
+import { Vector, isCollidedNodes } from "src:/lib/geometry";
 
-export class Node<T extends Scene = Scene> {
+
+export class Node<T extends Scene = Scene> extends ReactiveObject {
     private static lastId = 0
     static issueId() {
         return Node.lastId++
     }
 
-    public position: Vector = new Vector(0, 0)
+    protected subscriptions: Map<Observable<unknown>, Subscription[]> = new Map()
+
+    public $position: BehaviorSubject<Vector> = new BehaviorSubject(new Vector(0, 0))
+    get position() {
+        return this.$position.value
+    }
     public readonly id: number
 
-    public collidable = false
+    public $collidable: BehaviorSubject<boolean> = new BehaviorSubject(false)
+    get collidable() {
+        return this.$collidable.value
+    }
+    set collidable(collides: boolean) {
+        this.$collidable.next(collides)
+    }
 
     // With what kind of objects this node collided
     public collidesWith: Set<string> = new Set()
     // To what kind of objects for colliding this node related
     public collideGroup: Set<string> = new Set()
 
-    // The size of objects is measured in chunks (see in src:/scenes/SceneSettings)
-    // Example: { width: 2 } -> { width: CHUNK_SIZE * 2 }
-    public width: number = 1
-    public height: number = 1
+    public $width: BehaviorSubject<number> = new BehaviorSubject(1)
+    public $height: BehaviorSubject<number> = new BehaviorSubject(1)
+    get width() {
+        return this.$width.value
+    }
+    set width(value) {
+        this.$width.next(value)
+    }
+    get height() {
+        return this.$height.value
+    }
+    set height(value) {
+        this.$height.next(value)
+    }
+
 
     debug: boolean = false
     debugColor: string = 'yellow'
 
     public scene: T
 
+    private $boundingBoxChange = merge(this.$x, this.$y, this.$width, this.$height)
+    private boundingBoxSub: Subscription | null = null
     constructor(scene: T) {
+        super()
         this.id = Node.issueId()
         this.scene = scene
+
+        this.$collidable
+            .pipe(
+                tap(() => {
+                    this.boundingBoxSub?.unsubscribe()
+                    this.boundingBoxSub = null
+                }),
+                filter(collide => !collide)
+            ).subscribe(
+                () => {
+                    this.boundingBoxSub = this.$boundingBoxChange
+                        .subscribe(
+                            () => {
+                                const node = this.getCollision()
+                                if (node) {
+                                    this.$_collidedWith.next(node)
+                                }
+                            }
+                        )
+
+                }
+            )
     }
+    private $_collidedWith: Subject<Node> = new Subject()
+    $collisionSignal: Observable<Node> = this.$_collidedWith
 
     init(): void | Promise<void> {};
-    act(delta: number): void {
-        if (this.collidable) {
-            const node = this.getCollision()
-            if (node) {
-                this.collisionOccured(node)
-            }
-        }
-    }
-
-    protected onCollisionCallback?: (node: Node) => void;
-    onCollided(cb: (node: Node) => void) {
-        this.onCollisionCallback = cb
-    }
-
-    protected collisionOccured(node: Node): void {
-        this.onCollisionCallback?.(node)
-    } 
 
     protected getCollision(): Node | undefined {
-        if (!this.collidable) return
+        if (!this.$collidable.value) return
 
         const scene = ServiceProvider.get('SceneService').activeScene
         const nodes = scene.getNodesFromGroups(this.collidesWith)
 
-        const p1 = this.position
-        const p1x2 = p1.x + this.width
-        const p1y2 = p1.y + this.height
         return nodes.find((node) => {
-            if (!node.collidable) return false;
-            const p2 = node.position
-            const p2x2 = p2.x + node.width
-            const p2y2 = p2.y + node.height
-
-            return (
-                p1.x < p2x2 && p1x2 > p2.x &&
-        p1.y < p2y2 && p1y2 > p2.y
-            )
+            if (!node.$collidable.value) return false;
+            return isCollidedNodes(this, node)
         })
     }
+    private $_destroyed = new Subject<void>()
+    $destroySignal: Observable<void> = this.$_destroyed
+    private $_actSignal = new Subject<number>()
+    $actSignal: Observable<number> = this.$_actSignal
+    act(delta: number) {
+        this.$_actSignal.next(delta)
+    }
 
-    protected destoyCallback: (() => void) | null = null;
     destroy() {
         const scene = ServiceProvider.get('SceneService').activeScene
         scene.removeNode(this)
@@ -88,11 +119,14 @@ export class Node<T extends Scene = Scene> {
                 nodes.splice(nodeInx, 1)
             })
         }
-        this.destoyCallback?.()
-    }
 
-    onDestroyed(cb: () => void) {
-        this.destoyCallback = cb
+        this.$_destroyed.next()
+        this.$_destroyed.complete()
+        this.$position.complete()
+        this.$height.complete()
+        this.$collidable.complete()
+        this.$_collidedWith.complete()
+        this.clearSubscriptions()
     }
 
     drawDebugRect(color = this.debugColor) {
