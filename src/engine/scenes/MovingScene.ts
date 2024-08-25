@@ -1,8 +1,9 @@
 import { BehaviorSubject } from "rxjs";
 import { Scene } from "./Scene";
-import { Rect, isCollided } from "engine:/lib/geometry";
+import type { Rect} from "engine:/lib/geometry";
+import { isCollided } from "engine:/lib/geometry";
 import { ServiceProvider } from "engine:/services/ServiceProvider";
-import { Node } from 'engine:/nodes/Node'
+import type { Node } from 'engine:/nodes/Node'
 
 export class MovingScene extends Scene {
 

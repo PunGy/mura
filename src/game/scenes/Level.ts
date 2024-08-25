@@ -4,7 +4,10 @@ import { Background } from "game:/components/Background";
 import { CommandLeft, CommandRight, CommandUp } from "game:/components/Robot/Programmator/commands/commands";
 import { Robot } from "game:/components/Robot/Robot";
 import { State } from "game:/components/State/State";
-import { Observable, Subject } from "rxjs";
+import { CommandPalete } from "game:/components/UI/Panels/CommandPallet";
+import { CommandsSequence } from "game:/components/UI/Panels/CommandsSequence";
+import type { Observable} from "rxjs";
+import { Subject } from "rxjs";
 
 export class Level extends Scene {
     state: State
@@ -19,6 +22,12 @@ export class Level extends Scene {
         const robot = new Robot(this);
         this.robot = robot
         this.addNode(robot)
+
+        const commandPallet = new CommandPalete(this)
+        this.addNode(commandPallet)
+
+        const commandsSequence = new CommandsSequence(this)
+        this.addNode(commandsSequence)
 
         this.state = new State([robot])
         this.safeSubscribe(robot.programator.$activeCommand, () => {
@@ -37,9 +46,9 @@ export class Level extends Scene {
         })
 
         setTimeout(() => {
-            robot.programator.pushCommand(new CommandRight(this))
-            robot.programator.pushCommand(new CommandUp(this))
-            robot.programator.pushCommand(new CommandLeft(this))
+            robot.programator.pushCommand(new CommandRight())
+            robot.programator.pushCommand(new CommandUp())
+            robot.programator.pushCommand(new CommandLeft())
         }, 1000)
         setTimeout(() => {
             this.running = true

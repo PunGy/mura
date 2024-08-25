@@ -1,5 +1,5 @@
 import { SpriteNode } from "engine:/nodes/Node/CanvasNode/SpriteNode";
-import { Level } from "game:/scenes/Level";
+import type { Level } from "game:/scenes/Level";
 import RobotAsset from 'game:/assets/murbot.png'
 import { Programator } from "./Programmator/Programmator";
 import { first } from 'rxjs'

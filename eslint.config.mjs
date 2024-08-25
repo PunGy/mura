@@ -11,6 +11,7 @@ export default [
         rules: {
             indent: ['error', 4],
             'no-case-declarations': 'off',
+            "@typescript-eslint/consistent-type-imports": "error"
         },
     }
 ];

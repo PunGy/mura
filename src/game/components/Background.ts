@@ -2,7 +2,7 @@ import { Range } from "engine:/lib/range";
 import { CanvasNode } from "engine:/nodes/Node/CanvasNode";
 import { SpriteNode } from "engine:/nodes/Node/CanvasNode/SpriteNode";
 import { ServiceProvider } from "engine:/services/ServiceProvider";
-import { Level } from "game:/scenes/Level";
+import type { Level } from "game:/scenes/Level";
 import BackgroundAsset from 'game:/assets/background.png'
 import { first } from "rxjs";
 
@@ -46,9 +46,9 @@ export class Background extends CanvasNode<Level> {
 
         let nextColor: 'light' | 'dark' = 'light'
         const chunks: Array<BackgroundChunk> = []
-        new Range(0, this.width, BackgroundChunk.WIDTH).iterate((x) => {
+        new Range(0, this.width - 200, BackgroundChunk.WIDTH).iterate((x) => {
             nextColor = nextColor === 'light' ? 'dark' : 'light'
-            new Range(0, this.height, BackgroundChunk.HEIGHT).iterate((y) => {
+            new Range(0, this.height - 100, BackgroundChunk.HEIGHT).iterate((y) => {
                 const chunk = new BackgroundChunk(level, nextColor)
                 chunk.position.x = x
                 chunk.position.y = y

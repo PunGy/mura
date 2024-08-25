@@ -134,4 +134,12 @@ export class LinkedList<T> {
         this.cursor = this.cursor?.prev ?? null
         return node
     }
+
+    forEach(cb: (val: T) => void) {
+        let node = this.head
+        while (node) {
+            cb(node.value)
+            node = node.next
+        }
+    }
 }

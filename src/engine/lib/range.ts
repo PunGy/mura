@@ -8,7 +8,7 @@ type Step<T> = T | ((x: T) => T)
 export class Range<T = number> {
     #from: number
     #to: number
-    #cursor: T 
+    #cursor: T
     #step: Step<T>
     #iteration: number
     // #cached: Array<number>
@@ -31,7 +31,7 @@ export class Range<T = number> {
         this.#step = step as Step<T>
         this.#iteration = 0
 
-        return this 
+        return this
     }
 
     *[Symbol.iterator]() {
@@ -62,12 +62,12 @@ export class Range<T = number> {
             return this.#previous
         }
 
-        const nextCursor: T = typeof this.#step === 'function' 
+        const nextCursor: T = typeof this.#step === 'function'
             // @ts-expect-error fix later
-            ? this.#step(this.#cursor, this.#iteration) 
+            ? this.#step(this.#cursor, this.#iteration)
             // @ts-expect-error fix later
             : this.#cursor + this.#step
-            // @ts-expect-error fix later
+        // @ts-expect-error fix later
         const isLast = this.#to <= nextCursor
         const res = { value: this.#cursor, done: isLast, i: this.#iteration }
         this.#cursor = nextCursor
@@ -146,7 +146,7 @@ export class Range<T = number> {
             (inst as unknown as Iteration<B>).value = fn(inst.value)
             return inst as unknown as Iteration<B>
         }
-        return range 
+        return range
     }
 
     filter(predicate: (el: T) => boolean) {
@@ -196,5 +196,4 @@ export class Range<T = number> {
 
         return range
     }
-
-} 
+}

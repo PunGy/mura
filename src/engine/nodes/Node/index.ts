@@ -1,7 +1,8 @@
 import { assert } from "engine:/lib";
-import { Scene } from "engine:/scenes/Scene";
+import type { Scene } from "engine:/scenes/Scene";
 import {ServiceProvider} from "engine:/services/ServiceProvider.ts";
-import { merge, BehaviorSubject, Observable, filter, Subject, Subscription, tap } from 'rxjs'
+import type { Observable, Subscription} from 'rxjs';
+import { merge, BehaviorSubject, filter, Subject, tap } from 'rxjs'
 import { ReactiveObject } from "engine:/lib/RectiveObject";
 import { Vector, isCollidedNodes } from "engine:/lib/geometry";
 

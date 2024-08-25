@@ -1,6 +1,7 @@
-import { Observable, Subject } from "rxjs";
+import type { Observable} from "rxjs";
+import { Subject } from "rxjs";
 import { ReactiveObject } from "engine:/lib/RectiveObject";
-import { Node } from "engine:/nodes/Node";
+import type { Node } from "engine:/nodes/Node";
 
 export class Scene extends ReactiveObject {
     private _nodes: Map<number, Node> = new Map()

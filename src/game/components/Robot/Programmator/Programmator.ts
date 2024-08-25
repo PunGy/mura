@@ -1,10 +1,15 @@
-import { LinkedList, ListNode } from "engine:/lib/LinkedList";
-import { Command } from "./Command";
-import { Robot } from "../Robot";
-import { BehaviorSubject, Observable } from "rxjs";
+import type { ListNode } from "engine:/lib/LinkedList";
+import { LinkedList } from "engine:/lib/LinkedList";
+import type { Command } from "./Command";
+import type { Robot } from "../Robot";
+import type { Observable } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 
 export class Programator {
     commandQueue: LinkedList<Command> = new LinkedList()
+    private $_commandQueue: BehaviorSubject<LinkedList<Command>> = new BehaviorSubject(this.commandQueue)
+    $commandQueue: Observable<LinkedList<Command>> = this.$_commandQueue
+
     private $_activeCommand = new BehaviorSubject<ListNode<Command> | null>(null)
     $activeCommand: Observable<ListNode<Command> | null> = this.$_activeCommand
 
@@ -21,10 +26,12 @@ export class Programator {
 
     prependCommand(newCommand: Command, before: ListNode<Command>) {
         this.commandQueue.prepend(before, newCommand)
+        this.$_commandQueue.next(this.commandQueue)
     }
     pushCommand(newCommand: Command) {
         console.log('command pushed', newCommand)
         this.commandQueue.pushBack(newCommand)
+        this.$_commandQueue.next(this.commandQueue)
     }
 
     tick() {

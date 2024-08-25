@@ -1,7 +1,7 @@
 import { CanvasNode } from 'engine:/nodes/Node/CanvasNode'
 import type {Sprite} from "engine:/services/RenderService";
 import {ServiceProvider} from "engine:/services/ServiceProvider.ts";
-import { Scene } from 'engine:/scenes/Scene';
+import type { Scene } from 'engine:/scenes/Scene';
 
 export type PlayAnimationEntry = {
   frames: number, // 0 if static

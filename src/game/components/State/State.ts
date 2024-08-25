@@ -1,4 +1,5 @@
-import { LinkedList, ListNode } from "engine:/lib/LinkedList"
+import type { ListNode } from "engine:/lib/LinkedList";
+import { LinkedList } from "engine:/lib/LinkedList"
 
 interface Serializable<T = unknown> {
     serialize(): T;

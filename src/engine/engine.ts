@@ -7,7 +7,7 @@ import { ViewportService } from './services/ViewportService.ts'
 import { isCanvas, assert, assertNil } from './lib/index.ts'
 import { InputService } from './services/InputService.ts'
 import { SceneService } from "./services/SceneService.ts";
-import { Scene } from './scenes/Scene.ts'
+import type { Scene } from './scenes/Scene.ts'
 import { AudioService } from './services/AudioService.ts'
 import { EventService } from './services/EventService.ts'
 
@@ -65,7 +65,6 @@ declare global {
     interface Window {
         ServiceProvider: ServiceProvider;
     }
-
 }
 
 function gameLoop(delta: number) {

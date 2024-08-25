@@ -1,5 +1,5 @@
 import { Node } from 'engine:/nodes/Node'
-import { Scene } from 'engine:/scenes/Scene';
+import type { Scene } from 'engine:/scenes/Scene';
 import { ServiceProvider } from 'engine:/services/ServiceProvider';
 
 export class CanvasNode<T extends Scene> extends Node<T> {

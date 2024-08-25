@@ -1,4 +1,4 @@
-import { Observable, Subscription } from "rxjs"
+import type { Observable, Subscription } from "rxjs"
 
 export class ReactiveObject {
     protected subscriptions: Map<Observable<unknown>, Subscription[]> = new Map()

@@ -1,7 +1,7 @@
 import {CanvasNode} from "engine:/nodes/Node/CanvasNode";
 import {ServiceProvider} from "engine:/services/ServiceProvider.ts";
-import {Sprite} from "engine:/services/RenderService.ts";
-import { Scene } from "engine:/scenes/Scene";
+import type {Sprite} from "engine:/services/RenderService.ts";
+import type { Scene } from "engine:/scenes/Scene";
 
 export class SpriteNode<T extends Scene> extends CanvasNode<T> {
     protected sprite: Sprite | null = null;
