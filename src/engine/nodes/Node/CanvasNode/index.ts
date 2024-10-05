@@ -12,5 +12,5 @@ export class CanvasNode<T extends Scene> extends Node<T> {
 
     get $renderSignal() {
         return ServiceProvider.get('EventService').$renderSignal
-    } 
+    }
 }
