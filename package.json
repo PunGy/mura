@@ -1,0 +1,28 @@
+{
+  "name": "game-engine-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "TypeScript game engine monorepo",
+  "workspaces": [
+    "game",
+    "packages/**"
+  ],
+  "scripts": {
+    "dev": "pnpm --filter game dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.14.0",
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "eslint": "^9.33.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2"
+  }
+}

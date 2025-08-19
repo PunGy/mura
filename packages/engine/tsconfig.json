@@ -1,0 +1,3 @@
+{
+  "extends": "@mura/configs/tsconfig.base.json"
+}
