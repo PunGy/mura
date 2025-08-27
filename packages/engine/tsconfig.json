@@ -1,3 +1,6 @@
 {
+  "compilerOptions": {
+    "baseUrl": "../"
+  },
   "extends": "@mura/configs/tsconfig.base.json"
 }

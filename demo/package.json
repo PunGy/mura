@@ -1,5 +1,5 @@
 {
-  "name": "game",
+  "name": "LoBi",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mura/engine": "workspace:*"
+    "@mura/engine": "workspace:*",
+    "reactive-fluid": "catalog:"
   },
   "devDependencies": {
     "@mura/configs": "workspace:*",
-    "vite": "^7.1.2"
+    "vite": "^7.1.2",
+    "vite-tsconfig-paths": "5.1.4"
   }
 }

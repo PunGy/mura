@@ -1,3 +1,5 @@
 packages:
   - 'packages/**'
-  - 'game'
+  - 'demo'
+catalog:
+  reactive-fluid: ^0.2.1

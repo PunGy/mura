@@ -4,9 +4,14 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
   },
   "devDependencies": {
     "@mura/configs": "workspace:*"
+  },
+  "dependencies": {
+    "reactive-fluid": "catalog:"
   }
 }
