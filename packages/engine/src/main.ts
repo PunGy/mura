@@ -2,6 +2,17 @@ import { Application } from "./application/Application"
 // @ts-expect-error TODO: typescript setup asset import
 import './styles.css'
 
+declare global {
+    /**
+    * @deprecated Following node is browser node!
+    * Mura node:
+    * import { Node } from "@mura/engine/src/node/Node"
+    */
+    interface Node {
+        _: undefined;
+    }
+}
+
 export function main(App: new () => Application) {
     const app = new App()
 

@@ -24,7 +24,7 @@ export class RenderEngine {
     ctx!: CanvasRenderingContext2D
     pixelRatio: number = 1
 
-    drawPool: Array<RenderRect> = []
+    private drawPool: Array<RenderRect> = []
     constructor(public app: Application) {}
 
     init(canvas: HTMLCanvasElement) {
@@ -40,16 +40,21 @@ export class RenderEngine {
               ctx.backingStorePixelRatio || 1
         this.pixelRatio = dpr / bsr
 
-
         Fluid.listen(
-            this.app.tick,
+            this.app.draw,
             this.draw.bind(this),
             { priority: Fluid.priorities.lowest },
         )
     }
 
     private draw() {
-        this.ctx.clearRect(0, 0, this.app.width, this.app.height)
+        if (this.app.background) {
+            this.ctx.fillStyle = this.app.background
+            this.ctx.fillRect(0, 0, this.app.width, this.app.height)
+        } else {
+            this.ctx.clearRect(0, 0, this.app.width, this.app.height)
+        }
+
         for (const obj of this.drawPool) {
             this.ctx.save()
 

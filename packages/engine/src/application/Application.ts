@@ -2,6 +2,7 @@ import { assertNil } from "@mura/engine/src/lib/assert"
 import { ViewportService } from "@mura/engine/src/viewport/Viewport"
 import { Fluid } from 'reactive-fluid'
 import type { Scene } from "../scene/Scene"
+import type { StratchingStrategy } from "../viewport/types"
 
 export class Application {
     container: HTMLDivElement
@@ -14,8 +15,13 @@ export class Application {
     width = 0
     height = 0
 
+    viewportStractching: StratchingStrategy = 'fit-viewport'
+
+    background?: string
+
     // emmiters
     tick = Fluid.val(0)
+    draw = Fluid.val(0)
 
     constructor() {
         const appContainer = document.getElementById('app') as HTMLDivElement | null 
@@ -25,20 +31,16 @@ export class Application {
     }
 
     init() {
-        if (this.height && this.width) {
-            this.container.style.width = this.width + "px"
-            this.container.style.height = this.height + "px"
-        }
         this.viewport.init()
     }
 
     mainLoop(delta: number) {
         Fluid.write(this.tick, delta)
+        Fluid.write(this.draw, 0)
     }
 
     activeScene?: Scene
     setScene(scene: Scene) {
-        scene.app = this
         this.activeScene = scene
     }
 }

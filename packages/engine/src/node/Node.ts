@@ -35,10 +35,17 @@ export class Node implements Rect {
     width: number = 0
     height: number = 0
 
-    scene?: Scene
-    app?: Application
+    scene: Scene
+    get app() {
+        return this.scene.app
+    }
 
     id!: number
+
+    constructor(scene: Scene) {
+        this.scene = scene
+        Node.registry.add(this)
+    }
 
     private inspectConfig?: InspectNodeConfig
     inspect(color: string) {
@@ -59,14 +66,10 @@ export class Node implements Rect {
         }
     }
 
-    constructor() {
-        Node.registry.add(this)
-    }
-
     /**
      * Called upon connecting to scene and app
      */
-    onConnect(scene: Scene) {}
+    init() {}
 
     destroy() {
         Node.registry.delete(this)
@@ -74,9 +77,3 @@ export class Node implements Rect {
 
     static registry = new NodeRegistry()
 }
-
-/**
- * Connected node
- * Node which has been connected to the scene
- */
-export type CNode = Node & { scene: Scene; app: Application }

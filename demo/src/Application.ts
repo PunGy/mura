@@ -1,37 +1,35 @@
 import { Application } from '@mura/engine/src/application/Application';
 import { lobiLog } from './lib/lobiLog';
-import { Node } from '@mura/engine/src/node/Node'
+import { SpriteNode } from '@mura/engine/src/node/SpriteNode'
 import { Scene } from '@mura/engine/src/scene/Scene';
+import { CanvasTexture } from '@mura/engine/src/texture/CanvasTexture';
 import { Fluid } from 'reactive-fluid'
 
-class RectNode extends Node {
-    width = 20
-    height = 20
+class RectNode extends SpriteNode {
+    width = 50
+    height = 50
 
-    onConnect(): void {
-        const app = this.app!;
+    texture = new CanvasTexture(this)
+
+    init(): void {
+        super.init()
+
+        this.texture.color = 'green'
 
         // px/s
-        const speed = 30 / 1000
+        const speed = 500 / 1000
         let dir = 1
 
-        let time = 0;
-        Fluid.listen(app.tick, (delta) => {
+        Fluid.listen(this.app.tick, (delta) => {
             this.x += speed * delta * dir
 
-            if (dir === 1 && this.x >= app.width) {
-                lobiLog.info('passed in', time)
+            if (dir === 1 && (this.x + this.width) >= this.app.width) {
+                this.x = this.app.width - this.width
                 dir = -1
-                this.x = app.width
-                time = 0
             } else if (dir === -1 && this.x < 0) {
-                lobiLog.info('passed in', time)
-                dir = 1
                 this.x = 0
-                time = 0
+                dir = 1
             }
-
-            app.viewport.renderer.rect(this.x, this.y, this.width, this.height, 'green', 'fill')
         })
     }
 }
@@ -40,11 +38,14 @@ export class LoBiApplication extends Application {
     width = 800
     height = 600
 
+    background = '#1D1D1F'
+
     init(): void {
         super.init()
         lobiLog.info('initialized!')
-        const scene = new Scene()
+
+        const scene = new Scene(this)
         this.setScene(scene)
-        scene.addNode(new RectNode)
+        scene.addNode(new RectNode(scene))
     }
 }

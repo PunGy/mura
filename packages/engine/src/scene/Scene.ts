@@ -1,21 +1,16 @@
 import { Application } from "@mura/engine/src/application/Application"
-import { Node, type CNode } from "@mura/engine/src/node/Node"
+import { Node } from "@mura/engine/src/node/Node"
 
 export class Scene {
-    app?: Application
     id: string
-    nodes: Array<CNode> = []
+    nodes: Array<Node> = []
 
-    constructor(id?: string) {
+    constructor(public app: Application, id?: string) {
         this.id = id ? `Scene: [${id}]` : 'Scene'
     }
 
-    private connectNode(node: Node): asserts node is CNode {
-        node.scene = this
-        node.app = this.app
-        if (node.onConnect) {
-            node.onConnect(this)
-        }
+    private connectNode(node: Node) {
+        node.init()
     }
 
     addNode(node: Node) {
