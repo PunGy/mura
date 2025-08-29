@@ -3,19 +3,24 @@ import { ViewportService } from "@mura/engine/src/viewport/Viewport"
 import { Fluid } from 'reactive-fluid'
 import type { Scene } from "../scene/Scene"
 import type { StratchingStrategy } from "../viewport/types"
+import { InputService } from "../input/InputService"
+import type { Key } from "../input/types"
 
 export class Application {
     container: HTMLDivElement
 
+    title = "MuraDemo"
+
     // Services
     viewport: ViewportService
+    input: InputService
 
     // Properties
     startTime = 0
     width = 0
     height = 0
 
-    viewportStractching: StratchingStrategy = 'fit-viewport'
+    viewportStractching: StratchingStrategy = 'none'
 
     background?: string
 
@@ -28,10 +33,12 @@ export class Application {
         assertNil(appContainer, 'Container with id #app should be on the page!')
         this.container = appContainer
         this.viewport = new ViewportService(this)
+        this.input = new InputService(this)
     }
 
     init() {
         this.viewport.init()
+        this.input.init()
     }
 
     mainLoop(delta: number) {
