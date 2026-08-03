@@ -1,4 +1,4 @@
-import { Fluid } from "reactive-fluid"
+import * as R from 'reroi'
 import type { Texture } from "../texture/Texture"
 import { Node } from "./Node"
 
@@ -11,7 +11,7 @@ export class SpriteNode extends Node {
 
         const texture = this.texture
         if (texture) {
-            this.stopDraw = Fluid.listen(this.app.draw, () => {
+            this.stopDraw = R.listen(this.app.draw, () => {
                 texture.draw()
             })
         }

@@ -1,6 +1,6 @@
 import { SpriteNode } from "@mura/engine/src/node/SpriteNode"
 import { CanvasTexture } from "@mura/engine/src/texture/CanvasTexture"
-import { Fluid } from 'reactive-fluid'
+import * as R from 'reroi'
 
 export class SlidingNode extends SpriteNode {
     width = 50
@@ -17,7 +17,7 @@ export class SlidingNode extends SpriteNode {
         const speed = 500 / 1000
         let dir = 1
 
-        Fluid.listen(this.app.tick, (delta) => {
+        R.listen(this.app.tick, (delta) => {
             this.x += speed * delta * dir
 
             if (dir === 1 && (this.x + this.width) >= this.app.width) {

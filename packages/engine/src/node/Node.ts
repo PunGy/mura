@@ -1,7 +1,7 @@
 import { Application } from '@mura/engine/src/application/Application'
 import { type Rect } from '@mura/engine/src/lib/geometry/rect'
 import { Scene } from '@mura/engine/src/scene/Scene'
-import { Fluid } from 'reactive-fluid'
+import * as R from 'reroi'
 
 class NodeRegistry {
     private lastId = 0
@@ -53,7 +53,7 @@ export class Node implements Rect {
             const viewport = this.app.viewport
             this.inspectConfig = {
                 color,
-                stopInspect: Fluid.listen(this.app.tick, () => {
+                stopInspect: R.listen(this.app.tick, () => {
                     viewport.renderer.rect(this.x, this.y, this.width, this.height, this.inspectConfig!.color, 'stroke')
                 }),
             }

@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type:check": "tsc"
   },
   "dependencies": {
     "@mura/engine": "workspace:*",
-    "reactive-fluid": "catalog:"
+    "reroi": "catalog:"
   },
   "devDependencies": {
     "@mura/configs": "workspace:*",

@@ -1,6 +1,6 @@
 import { assertNil } from "@mura/engine/src/lib/assert"
 import { ViewportService } from "@mura/engine/src/viewport/Viewport"
-import { Fluid } from 'reactive-fluid'
+import * as R from 'reroi'
 import type { Scene } from "../scene/Scene"
 import type { StratchingStrategy } from "../viewport/types"
 import { InputService } from "../input/InputService"
@@ -25,8 +25,8 @@ export class Application {
     background?: string
 
     // emmiters
-    tick = Fluid.val(0)
-    draw = Fluid.val(0)
+    tick = R.val(0)
+    draw = R.val(0)
 
     constructor() {
         const appContainer = document.getElementById('app') as HTMLDivElement | null 
@@ -42,8 +42,8 @@ export class Application {
     }
 
     mainLoop(delta: number) {
-        Fluid.write(this.tick, delta)
-        Fluid.write(this.draw, 0)
+        R.write(this.tick, delta)
+        R.write(this.draw, 0)
     }
 
     activeScene?: Scene

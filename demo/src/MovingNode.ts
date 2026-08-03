@@ -1,6 +1,6 @@
 import { SpriteNode } from "@mura/engine/src/node/SpriteNode"
 import { CanvasTexture } from "@mura/engine/src/texture/CanvasTexture"
-import { Fluid } from 'reactive-fluid'
+import * as R from 'reroi'
 
 export class MovingNode extends SpriteNode {
     width = 50
@@ -29,7 +29,7 @@ export class MovingNode extends SpriteNode {
         })
 
         const input = this.app.input
-        Fluid.listen(this.app.tick, (delta) => {
+        R.listen(this.app.tick, (delta) => {
             if (input.isActionActive('Up')) {
                 this.y -= speed * delta
             } else if (input.isActionActive('Down')) {

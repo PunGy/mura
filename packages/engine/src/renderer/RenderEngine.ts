@@ -1,4 +1,4 @@
-import { Fluid } from "reactive-fluid"
+import * as R from 'reroi'
 import type { Application } from "../application/Application"
 import { assertNil } from "../lib/assert"
 import type { Rect } from "../lib/geometry/rect"
@@ -40,10 +40,10 @@ export class RenderEngine {
               ctx.backingStorePixelRatio || 1
         this.pixelRatio = dpr / bsr
 
-        Fluid.listen(
+        R.listen(
             this.app.draw,
             this.draw.bind(this),
-            { priority: Fluid.priorities.lowest },
+            { priority: R.priorities.lowest },
         )
     }
 
