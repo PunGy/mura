@@ -4,18 +4,34 @@ import {ServiceProvider} from "src:/services/ServiceProvider.ts";
 import {CHUNK_SIZE} from "src:/scenes/SceneSettings.ts";
 import { Scene } from 'src:/scenes/Scene';
 
+export type RuntimeAnimation = (frame: number) => void;
+
 export type PlayAnimationEntry = {
-  frames: number, // 0 if static
-  sprite: Sprite | null,
-  duration: number,
+    tag: 'play',
+    frames: number, // 0 if static
+    sprite: Sprite | null,
+    duration: number,
 }
 
-export type StaticAnimationEntry = {
-  frames: 0,
-  sprite: Sprite | null,
+export type StaticSpriteAnimationEntry = {
+    tag: 'static_sprite'
+    frames: 0,
+    sprite: Sprite | null,
+}
+export type StaticRuntimeAnimationEntry = {
+    tag: 'static_runtime'
+    frames: 0,
+    draw: RuntimeAnimation,
 }
 
-export type AnimationEntry = PlayAnimationEntry | StaticAnimationEntry
+export type RuntimeAnimationEntry = {
+    tag: 'runtime'
+    frames: number,
+    animate: RuntimeAnimation,
+    duration: number,
+}
+
+export type AnimationEntry = PlayAnimationEntry | StaticSpriteAnimationEntry | StaticRuntimeAnimationEntry | RuntimeAnimationEntry
 export class AnimationNode<T extends Scene, AnimationKeys extends PropertyKey> extends CanvasNode<T> {
     animations = {} as Record<AnimationKeys, AnimationEntry>
     activeAnimationKey = '' as AnimationKeys
@@ -30,9 +46,13 @@ export class AnimationNode<T extends Scene, AnimationKeys extends PropertyKey> e
         return this._activeFrame
     }
     set activeFrame(activeFrame) {
-        if (this.activeAnimation.sprite !== null) {
-            this.activeAnimation.sprite.renderer
-                .crop(this.frameWidth * this.activeFrame, 0, this.frameWidth, this.frameHeight)
+        const animation = this.activeAnimation;
+        const sprite = this.isPlay(animation) || this.isStaticSprite(animation)
+            ? animation.sprite
+            : null;
+        
+        if (sprite) {
+            sprite.renderer.crop(this.frameWidth * this.activeFrame, 0, this.frameWidth, this.frameHeight)
         }
         this._activeFrame = activeFrame
     }
@@ -45,14 +65,36 @@ export class AnimationNode<T extends Scene, AnimationKeys extends PropertyKey> e
                 .size(this.width * CHUNK_SIZE, this.height * CHUNK_SIZE)
         }
     }
-    static staticFrameAnimation(sprite: StaticAnimationEntry['sprite']): StaticAnimationEntry {
+    staticRuntimeFrameAnimation(draw: RuntimeAnimation): StaticRuntimeAnimationEntry {
         return {
+            tag: 'static_runtime',
             frames: 0,
-            sprite,
+            draw,
         }
     }
-    private isStatic(animation: AnimationEntry | StaticAnimationEntry): animation is StaticAnimationEntry {
-        return animation.frames === 0
+    runtimeFrameAnimation(frames: number, duration: number, animate: RuntimeAnimation): RuntimeAnimationEntry {
+        return {
+            tag: 'runtime',
+            frames,
+            animate,
+            duration,
+        }
+    }
+    private isStatic(animation: AnimationEntry): animation is StaticSpriteAnimationEntry | StaticRuntimeAnimationEntry {
+        return animation.tag.startsWith('static')
+    }
+    private isStaticSprite(animation: AnimationEntry): animation is StaticSpriteAnimationEntry {
+        return animation.tag === 'static_sprite'
+    }
+    private isStaticRuntime(animation: AnimationEntry): animation is StaticRuntimeAnimationEntry {
+        return animation.tag === 'static_runtime'
+    }
+
+    private isRuntime(animation: AnimationEntry): animation is RuntimeAnimationEntry {
+        return animation.tag === 'runtime'
+    }
+    private isPlay(animation: AnimationEntry): animation is PlayAnimationEntry {
+        return animation.tag === 'play'
     }
     private animationDelta = 0
 
@@ -78,14 +120,21 @@ export class AnimationNode<T extends Scene, AnimationKeys extends PropertyKey> e
         }
     }
     render() {
-        if (this.activeAnimation.sprite === null) {
-            console.error('sprite is not loaded yet!')
-            return;
-        }
+        const animation = this.activeAnimation
+        if (this.isRuntime(animation)) {
+            animation.animate(this.activeFrame)
+        } else if (this.isStaticRuntime(animation)) {
+            animation.draw(0)
+        } else if (this.isStaticSprite(animation) || this.isPlay(animation)) {
+            if (animation.sprite === null) {
+                console.error('sprite is not loaded yet!')
+                return;
+            }
 
-        this.activeAnimation.sprite.renderer
-            .position(this.position.x, this.position.y)
-            .crop(this.frameWidth * this.activeFrame, 0, this.frameWidth, this.frameHeight)
-            .draw()
+            animation.sprite.renderer
+                .position(this.position.x, this.position.y)
+                .crop(this.frameWidth * this.activeFrame, 0, this.frameWidth, this.frameHeight)
+                .draw()
+        }
     }
 }

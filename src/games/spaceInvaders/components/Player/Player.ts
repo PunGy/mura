@@ -13,7 +13,10 @@ export class Player extends SpriteNode<MainScene> {
     width = 60 
     height = 30
     speed = 0.5
-    private missleReady = true 
+    private missleReady = true
+
+    collidable = true
+    collideGroup = new Set(['player'])
 
     constructor(scene: MainScene) {
         super(scene, PlayerSprite)
@@ -36,6 +39,9 @@ export class Player extends SpriteNode<MainScene> {
     }
 
     act(delta: number) {
+        if (!this.scene.playing) {
+            return;
+        }
         const inputService = ServiceProvider.get('InputService')
         const viewportService = ServiceProvider.get('ViewportService')
         const scene = this.scene

@@ -13,6 +13,7 @@ import { assertNil } from "src:/lib";
 export class MainScene extends Scene {
     private _score = 0;
     private _level = 1;
+    private _playing = true;
     get score() {
         return this._score
     }
@@ -24,12 +25,16 @@ export class MainScene extends Scene {
     get level() {
         return this._level
     }
+    get playing() {
+        return this._playing
+    }
     set level(newLevel) {
         this._level = newLevel
         this.levelLabel.text = `Level: ${newLevel}`
     }
     scoreLabel: Label
     levelLabel: Label
+    gameoverLabel: Label
 
     enemyOperator: EnemyOperator
 
@@ -47,8 +52,15 @@ export class MainScene extends Scene {
         score.position.y = 26
         this.scoreLabel = score
         this.addNode(score)
-
+        
         const viewportService = ServiceProvider.get('ViewportService')
+        const gameover = new Label(this, 'GAMEOVER', 68)
+        gameover.position.x = viewportService.width / 2 - gameover.width / 2;
+        gameover.position.y = viewportService.height / 2 - gameover.height / 2;
+        gameover.hidden = true;
+        this.addNode(gameover)
+        this.gameoverLabel = gameover;
+
         const level = new Label(this, 'Level: 1', 16)
         level.position.x = viewportService.width / 2 - level.width
         level.position.y = 26
@@ -81,5 +93,7 @@ export class MainScene extends Scene {
     gameover() {
         assertNil(this.gameoverSound)
         this.gameoverSound.play()
+        this._playing = false;
+        this.gameoverLabel.hidden = false;
     }
 }

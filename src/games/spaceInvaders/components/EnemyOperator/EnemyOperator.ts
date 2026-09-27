@@ -10,6 +10,7 @@ import { AudioPlayer } from "src:/services/AudioService"
 import { assertNil } from "src:/lib"
 import { LinkedList } from "src:/lib/LinkedList"
 import { CanvasNode } from "src:/nodes/Node/CanvasNode"
+import { randInt } from "src:/lib/rand"
 
 const Y_SCREEN_PADDING = 40
 const X_SCREEN_PADDING = 20
@@ -104,6 +105,39 @@ export class EnemyOperator extends CanvasNode<MainScene> {
         this.position.y = minY
     }
 
+    findBottomRow(): Array<Enemy> {
+        const collumns: Record<number, Array<Enemy>> = {}
+
+        this.enemies.forEach(enemy => {
+            const collumn = collumns[enemy.position.x]
+            if (collumn) {
+                collumn.push(enemy)
+            } else {
+                collumns[enemy.position.x] = [enemy]
+            }
+        })
+
+        const bottomRow: Array<Enemy> = []
+
+        Object.values(collumns).forEach(collumn => {
+            let maxY = 0
+            let maxYEnemy!: Enemy
+            collumn.forEach(enemy => {
+                if (maxY < enemy.position.y) {
+                    maxYEnemy = enemy
+                    maxY = enemy.position.y
+                }
+            })
+
+            bottomRow.push(maxYEnemy)
+        })
+
+        return bottomRow
+    }
+
+    shootWindow: [number, number] = [5000, 8000]
+    nextShootingAfter = randInt(this.shootWindow[0], this.shootWindow[1])
+
     timerDecreaseStep = 50
 
     static baseSpeed = 700
@@ -112,16 +146,23 @@ export class EnemyOperator extends CanvasNode<MainScene> {
     // 1 - right; 0 - left
     private direction = 1
     act(delta: number) {
-        if (this.stop) return;
+        if (!this.scene.playing) return;
         if (this.moveDelta >= this.moveTimer) {
             this.move()
             this.moveDelta = 0
         } else {
             this.moveDelta += delta
         }
+
+        this.nextShootingAfter -= delta
+        if (this.nextShootingAfter <= 0) {
+            const bottomRow = this.findBottomRow()
+            const i = randInt(0, bottomRow.length)
+            bottomRow[i]!.shoot()
+            this.nextShootingAfter = randInt(this.shootWindow[0], this.shootWindow[1])
+        }
     }
 
-    stop = false
     move() {
         const { position, width, enemyHeight } = this
         const viewport = ServiceProvider.get('ViewportService')
@@ -142,7 +183,6 @@ export class EnemyOperator extends CanvasNode<MainScene> {
 
         if (changedDirection) {
             if (this.position.y + this.height >= viewport.height - viewport.height / 5) {
-                this.stop = true
                 scene.gameover()
             }
             const moveYBy = enemyHeight + BETWEEN_PADDING

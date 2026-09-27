@@ -6,6 +6,8 @@ import { MainScene } from "../../scenes/MainScene";
 import { ServiceProvider } from "src:/services/ServiceProvider";
 import { AudioPlayer } from "src:/services/AudioService";
 import { assertNil } from "src:/lib";
+import { Bullet, BulletType } from "../Bullet";
+import { randFloat } from "src:/lib/rand";
 
 export enum EnemyType {
     RED = 'red',
@@ -39,6 +41,13 @@ export class Enemy extends SpriteNode<MainScene> {
         super(scene, enemyTypeToSprite[type])
         this.type = type
         this.reward = enemyTypeToReward[type]
+    }
+
+    shoot() {
+        const bullet = new Bullet(this.scene, BulletType.ENEMY2)
+        bullet.position.y = this.position.y + this.height
+        bullet.position.x = this.position.x + this.width / 2
+        this.scene.addNode(bullet)
     }
 
     render() {

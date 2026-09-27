@@ -16,6 +16,9 @@ export class Label extends CanvasNode<MainScene> {
     }
 
     render() {
+        if (this.hidden) {
+            return
+        }
         ServiceProvider.get('RenderService')
             .text(
                 this.text,
